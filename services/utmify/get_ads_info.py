@@ -1,8 +1,10 @@
-import requests, os
+import requests, os, math
 from dotenv import load_dotenv
 
 from core.helpers import get_date, generate_basic_token
 from models.front_products_list import products_list
+import numpy as np
+from datetime import datetime
 
 load_dotenv(override=True)
 
@@ -23,30 +25,48 @@ def auth():
   return token
 
 def get_campaigns(day, name_contains=None):
-  url = f"{base_url}/orders/search-objects"
-  token = auth()
-  start_date = get_date(day=day, period="start")
-  end_date = get_date(day=day, period="end")
+    url = f"{base_url}/orders/search-objects"
+    token = auth()
+    start_date = get_date(day=day, period="start")
+    end_date = get_date(day=day, period="end")
 
-  headers = {
-    "Authorization": f"Bearer {token}",
-    "Content-Type": "application/json"
-  }
+    headers = {
+      "Authorization": f"Bearer {token}",
+      "Content-Type": "application/json"
+    }
 
-  payload = {
-    "level": "ad",
-    "adObjectStatuses": None,
-    "metaAdAccountIds": None,
-    "orderBy": "greater_profit",
-    "dashboardId": dashboard_id,
-    "dateRange": {
-      "from": start_date,
-      "to": end_date
-    },
-    "nameContains": name_contains,
-    "productNames": products_list
-  }
-  response = requests.post(url, json=payload, headers=headers)
-  response.raise_for_status()
+    payload = {
+      "level": "ad",
+      "adObjectStatuses": None,
+      "metaAdAccountIds": None,
+      "orderBy": "greater_profit",
+      "dashboardId": dashboard_id,
+      "dateRange": {
+          "from": start_date,
+          "to": end_date
+      },
+      "nameContains": name_contains,
+      "productNames": products_list
+    }
 
-  return response.json()
+    # Envia a requisição POST
+    try:
+      response = requests.post(url, json=payload, headers=headers)
+      response.raise_for_status()
+
+      # Obtém os dados da resposta
+      data = response.json().get("results", [])
+      for item in data:
+        item.pop('approvedOrdersByProductId', None)
+        
+      return data
+    
+    except requests.exceptions.RequestException as e:
+        # Tratar erros de requisição HTTP (ex: 404, 500, etc.)
+        print(f"Erro na requisição: {e}")
+        return []
+    except Exception as e:
+        # Tratar outros erros genéricos
+        print(f"Erro ao processar os dados: {e}")
+        return []
+
