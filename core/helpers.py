@@ -23,3 +23,11 @@ def generate_basic_token(username: str, password: str) -> str:
     token = f"Basic {token_bytes.decode('utf-8')}"
     
     return token
+
+def get_average_rate(new_rate: float, current_rate: float) -> float:
+  if new_rate > 0 and current_rate > 0:
+    return round((current_rate + new_rate) / 2, 4)
+  if new_rate == 0:
+    return current_rate
+  elif current_rate == 0:
+    return new_rate
