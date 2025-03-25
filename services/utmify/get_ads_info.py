@@ -2,7 +2,7 @@ import requests, os, math
 from dotenv import load_dotenv
 
 from core.helpers import get_date, generate_basic_token
-from models.front_products_list import products_list
+from models.front_products_list import front_products_list
 import numpy as np
 from datetime import datetime
 
@@ -24,7 +24,7 @@ def auth():
   token = response.json().get("auth").get("token")
   return token
 
-def get_campaigns(day, name_contains=None):
+def get_campaigns(day, name_contains=None, products=None):
     url = f"{base_url}/orders/search-objects"
     token = auth()
     start_date = get_date(day=day, period="start")
@@ -46,7 +46,7 @@ def get_campaigns(day, name_contains=None):
           "to": end_date
       },
       "nameContains": name_contains,
-      "productNames": products_list
+      "productNames": products
     }
 
     # Envia a requisição POST

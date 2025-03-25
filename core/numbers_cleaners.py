@@ -52,7 +52,7 @@ def int_to_currency(value: int):
     return value / 100.0  # Divide por 100 e retorna como float
   except (ValueError, TypeError):
     # Se não for um número válido, retorna um valor padrão
-    return "Invalid input"
+    return value
 
 # test_list = [
 #     "R$ 0,00",

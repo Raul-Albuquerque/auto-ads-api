@@ -1,9 +1,13 @@
-products_list = [
-  "Fórmula del Amor Verdadero"
+front_products_list = [
+  "Fórmula del Amor Verdadero",
+  "Programa Efecto Cleopatra",
+  "Get Her Back Formula",
+  "Aplicativo Pasión Obsesiva"
 ]
 
-offer_list = {
-  "LVH_ESP": {
-    "folder_id": "1XV7_jD-QLxEvQe695iwX-_-7ruDYJGQQ"
-  }
-}
+dev_front_products_list = [
+  "Fórmula del Amor Verdadero",
+  "Programa Efecto Cleopatra",
+  "Get Her Back Formula",
+  "Aplicativo Pasión Obsesiva"
+]

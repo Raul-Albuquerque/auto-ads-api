@@ -50,8 +50,4 @@ def search_worksheet_index(title, folder_id, worksheet_name):
     return page_list.index(worksheet_name)
   return False
 
-# def get_worksheet(title, folder_id, worksheet_index):
-#   spreadsheet = open_spreadsheet(title, folder_id)
-#   spreadsheet_page = spreadsheet.get_worksheet(worksheet_index)
-#   return spreadsheet_page
 

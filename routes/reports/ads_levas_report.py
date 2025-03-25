@@ -13,14 +13,14 @@ router = APIRouter()
 
 timezone = pytz.timezone("America/Sao_Paulo")
 raw_local_time = datetime.now(timezone)
-local_time = raw_local_time.strftime("%d/%m/%Y-%H:%M:%S")
+local_time = raw_local_time.strftime("%d/%m/%Y às %Hh%Mmin%Ss")
 
 @router.get("/ads/report/levas")
-def get_all_ads():
+def write_ads_levas_report():
 
   try:
     ads_spreadsheet = open_spreadsheet("DB_3.0", "1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz")
-    ads_worksheet_index = search_worksheet_index("DB_3.0", "1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz", "RAW2")
+    ads_worksheet_index = search_worksheet_index("DB_3.0", "1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz", "RAW")
     ads_worksheet = ads_spreadsheet.get_worksheet(ads_worksheet_index)
     ads = ads_worksheet.get_all_values()
     ads_df = pd.DataFrame(ads)
@@ -33,9 +33,10 @@ def get_all_ads():
     ads_df[62] = ads_df[13].astype(str).apply(extract_ad_name) # AD NAME
     ads_df[63] = ads_df[13].astype(str).apply(extract_offer_name) # OFFER
     ads_group = ads_df.groupby(62).apply(lambda x: x.values.tolist())
+    offer_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
 
-    trafic_spreadsheet = open_spreadsheet("LVH_ESP", "1XV7_jD-QLxEvQe695iwX-_-7ruDYJGQQ")
-    ads_levas_worksheet_index = search_worksheet_index("LVH_ESP", "1XV7_jD-QLxEvQe695iwX-_-7ruDYJGQQ", "Ads (levas)")
+    trafic_spreadsheet = open_spreadsheet("ECL_ESP", "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG")
+    ads_levas_worksheet_index = search_worksheet_index("ECL_ESP", "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG", "Ads (levas)")
     ads_levas_worksheet = trafic_spreadsheet.get_worksheet(ads_levas_worksheet_index)
     ads_levas_worksheet_data = ads_levas_worksheet.get_all_values()
     ads_levas_df = pd.DataFrame(ads_levas_worksheet_data)
@@ -89,16 +90,16 @@ def get_all_ads():
         formated_total_revenue = int_to_currency(total_revenue)
         formated_total_cpa = int_to_currency(total_cpa)
         formated_total_roas = int_to_currency(total_roas)
-        formated_total_hook = round(total_hook * 100, 2)
-        formated_total_ctr = round(total_ctr * 100, 2)
+        # formated_total_hook = round(total_hook * 100, 2)
+        # formated_total_ctr = round(total_ctr * 100, 2)
 
-        ad[7] = formated_total_spend
-        ad[8] = formated_total_revenue
+        ad[7] = total_spend
+        ad[8] = total_revenue
         ad[9] = total_sales
-        ad[10] = formated_total_cpa
-        ad[11] = formated_total_roas
-        ad[12] = formated_total_hook
-        ad[13] = formated_total_ctr
+        ad[10] = total_cpa
+        ad[11] = total_roas
+        ad[12] = total_hook
+        ad[13] = total_ctr
         ad[14] = local_time
 
         # Exibindo os resultados
@@ -106,15 +107,22 @@ def get_all_ads():
         print(f"Valor Gasto Utmify: {new_spend} - Valor Gasto Ads: {ads_levas_current_spend} - Total: {formated_total_spend}")
         print(f"Valor Faturado Utmify: {new_revenue} - Valor Faturado Ads: {ads_levas_current_revenue} - Total: {formated_total_revenue}")
         print(f"Vendas UTMify: {new_sales} - Vendas Ads: {ads_levas_current_sales} - Total: {total_sales}")
-        print(f"HOOK UTMify: {new_hook_rate} - HOOK Ads: {ads_levas_current_hook} - Total: {formated_total_hook}")
-        print(f"CTR UTMify: {new_ctr} - CTR Ads: {ads_levas_current_ctr} - Total: {formated_total_ctr}")
+        print(f"HOOK UTMify: {new_hook_rate} - HOOK Ads: {ads_levas_current_hook} - Total: {total_hook}")
+        print(f"CTR UTMify: {new_ctr} - CTR Ads: {ads_levas_current_ctr} - Total: {total_ctr}")
         print(f"CPA Total: {formated_total_cpa} - ROAS Total: {formated_total_roas}")
         print(f"Atualizado em: {local_time}")
         print("-" * 40)
 
-    return {"data": ads_levas_list}
-    
-
+    values_to_write_df = pd.DataFrame(ads_levas_list)
+    values_to_write_df[7] = values_to_write_df[7].apply(int_to_currency) # INVESTIDO
+    values_to_write_df[8] = values_to_write_df[8].apply(int_to_currency) # FATURAMENTO
+    values_to_write_df[10] = values_to_write_df[10].apply(int_to_currency) # CPA
+    values_to_write = values_to_write_df.values.tolist()
+    return {"data": offer_group}
+    ads_levas_worksheet.clear()
+    next_row = 1
+    ads_levas_worksheet.update(f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}", values_to_write)
+    return "Dados preenchidos com sucesso!"
 
   except Exception as e:
-    return ReportResponse(report_title="Get All Purchases", generated_at=datetime.now(), data={"Error": str(e)})
+    return ReportResponse(report_title="Get All Purchases - Error", generated_at=datetime.now(), data={"Error": str(e)})
