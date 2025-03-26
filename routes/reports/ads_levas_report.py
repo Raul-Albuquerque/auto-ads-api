@@ -44,8 +44,12 @@ def write_ads_levas_report():
       active_offer_name = item["offer_name"]
       if active_offer_name in offer_group:
         print(f"{active_offer_name} teve ocorrencia")
-        trafic_spreadsheet = open_spreadsheet(active_offer_name, "1u8RMIuvGNbsSYSVP_3Tvx0EHJ7sIyU5M")
-        ads_levas_worksheet_index = search_worksheet_index(active_offer_name, "1u8RMIuvGNbsSYSVP_3Tvx0EHJ7sIyU5M", "Ads (levas)")
+        try:
+          trafic_spreadsheet = open_spreadsheet(active_offer_name, "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG")
+        except Exception as e:
+          print(f"Erro ao abrir a planilha {active_offer_name}: {e}")
+          continue  # Pula para a próxima oferta
+        ads_levas_worksheet_index = search_worksheet_index(active_offer_name, "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG", "Ads (levas)")
         ads_levas_worksheet = trafic_spreadsheet.get_worksheet(ads_levas_worksheet_index)
         ads_levas_worksheet_data = ads_levas_worksheet.get_all_values()
         ads_levas_df = pd.DataFrame(ads_levas_worksheet_data)
