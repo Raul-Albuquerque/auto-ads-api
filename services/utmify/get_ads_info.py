@@ -24,7 +24,7 @@ def auth():
   response = requests.get(url, headers=headers)
   token = response.json().get("auth").get("token")
   return token
-   
+
 def get_campaigns(day, name_contains=None, products=None):
   url = f"{base_url}/orders/search-objects"
   try:

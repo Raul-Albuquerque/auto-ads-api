@@ -19,11 +19,11 @@ def get_all_ads(day:str):
     response = get_campaigns(day=day, name_contains=name_contains, products=None)
 
     if response.status == 400:
-      return ReportResponse(report_title="Write Utmify Ads - Error", generated_at=datetime.now(), message=f"Erro ao buscar dados da UTMify.", status=400)
+      return ReportResponse(report_title="Write Utmify Ads - Error", generated_at=datetime.now(), message=response.message, status=response.status)
 
     ads = response.data
     if len(ads) < 1:
-      return ReportResponse(report_title="Write Utmify Ads - Error", generated_at=datetime.now(), message=f"Erro ao buscar dados da UTMify.", status=400)
+      return ReportResponse(report_title="Write Utmify Ads - Error", generated_at=datetime.now(), message=response.message, status=response.status)
   
     def convert_to_list_of_lists(data):
       return [list(item.values()) for item in data]
