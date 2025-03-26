@@ -1,11 +1,11 @@
-import pytz, os
+import pytz, os,csv
 from datetime import datetime
 from fastapi import APIRouter
 import pandas as pd
 import numpy as np
 
 from models.report_models import ReportResponse
-from models.active_offers_info import dev_active_offers_info
+from models.active_offers_info import active_offers_info
 from core.helpers import get_average_rate, delete_reports_folder
 from services.gmail import send_email
 from core.cleaners import extract_ad_name, extract_offer_name
@@ -40,12 +40,12 @@ def write_ads_levas_report():
     offer_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
     # return {"data": offer_group}
 
-    for item in dev_active_offers_info:
+    for item in active_offers_info:
       active_offer_name = item["offer_name"]
       if active_offer_name in offer_group:
         print(f"{active_offer_name} teve ocorrencia")
-        trafic_spreadsheet = open_spreadsheet(active_offer_name, "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG")
-        ads_levas_worksheet_index = search_worksheet_index(active_offer_name, "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG", "Ads (levas)")
+        trafic_spreadsheet = open_spreadsheet(active_offer_name, "1u8RMIuvGNbsSYSVP_3Tvx0EHJ7sIyU5M")
+        ads_levas_worksheet_index = search_worksheet_index(active_offer_name, "1u8RMIuvGNbsSYSVP_3Tvx0EHJ7sIyU5M", "Ads (levas)")
         ads_levas_worksheet = trafic_spreadsheet.get_worksheet(ads_levas_worksheet_index)
         ads_levas_worksheet_data = ads_levas_worksheet.get_all_values()
         ads_levas_df = pd.DataFrame(ads_levas_worksheet_data)
@@ -55,9 +55,7 @@ def write_ads_levas_report():
         ads_levas_df[14] = ads_levas_df[14].astype(str).apply(str_to_int) # CLICKS
         ads_levas_df[15] = ads_levas_df[15].astype(str).apply(str_to_int) # IMPRESSOES
         ads_levas_df[16] = ads_levas_df[16].astype(str).apply(str_to_int) # VIDEOS VIEWS
-        # return {"data": ads_levas_df}
         ads_levas_list = ads_levas_df.values.tolist()
-        print(f"{active_offer_name} no index: {ads_levas_worksheet_index}")
 
         row = 0
         for ad in ads_levas_list:
