@@ -16,11 +16,15 @@ def get_all_ads(day:str):
   name_contains = None
 
   try:
-    ads = get_campaigns(day=day, name_contains=name_contains, products=None)
+    response = get_campaigns(day=day, name_contains=name_contains, products=None)
+
+    if response.status == 400:
+      return ReportResponse(report_title="Write Utmify Ads - Error", generated_at=datetime.now(), message=f"Error fetching data from UTMify", status=400)
+
+    ads = response.data
     def convert_to_list_of_lists(data):
       return [list(item.values()) for item in data]
 
-    # return {"data": ads}
     header = header_ads
     values_to_write = convert_to_list_of_lists(ads)
     values_to_write.insert(0, header)
@@ -30,7 +34,7 @@ def get_all_ads(day:str):
     worksheet.clear()
     next_row = 1
     worksheet.update(f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}", values_to_write)
-    return ReportResponse(report_title="Get All Purchases - write purchases", generated_at=local_time, count=len(values_to_write), data={"Status": "Os dados foram escritos com sucesso!"})
+    return ReportResponse(report_title="Write Utmify Ads - Success", generated_at=datetime.now(), message="Success: UTMify Ads information has been written successfully!", status=200)
 
   except Exception as e:
-    return ReportResponse(report_title="Get All Purchases", generated_at=datetime.now(), data={"Error": str(e)})
+    return ReportResponse(report_title="Write Utmify Ads - Error", generated_at=datetime.now(), message=f"Error: {str(e)}", status=400)

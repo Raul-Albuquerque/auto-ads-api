@@ -1,4 +1,4 @@
-import base64
+import base64,shutil,os
 from datetime import datetime, timedelta, timezone
 
 def get_date(day: str, period: str) -> str:
@@ -31,3 +31,10 @@ def get_average_rate(new_rate: float, current_rate: float) -> float:
     return current_rate
   elif current_rate == 0:
     return new_rate
+  
+def delete_reports_folder(folder="email-reports"):
+    if os.path.exists(folder):
+      shutil.rmtree(folder)
+      print(f"Pasta '{folder}' e seus arquivos foram removidos com sucesso.")
+    else:
+      print(f"Pasta '{folder}' não encontrada.")

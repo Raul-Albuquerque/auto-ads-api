@@ -54,5 +54,3 @@ def send_email():
     server.quit()
     
     print("E-mail enviado com sucesso!")
-
-send_email()

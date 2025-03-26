@@ -6,4 +6,6 @@ class ReportResponse(BaseModel):
   report_title: str
   generated_at: datetime
   count: Optional[int] = None
-  data: Any
+  status: Optional[int] = None
+  data: Optional[Any] = None
+  message: Optional[str] = None
