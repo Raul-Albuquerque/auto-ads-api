@@ -19,9 +19,12 @@ def get_all_ads(day:str):
     response = get_campaigns(day=day, name_contains=name_contains, products=None)
 
     if response.status == 400:
-      return ReportResponse(report_title="Write Utmify Ads - Error", generated_at=datetime.now(), message=f"Error fetching data from UTMify", status=400)
+      return ReportResponse(report_title="Write Utmify Ads - Error", generated_at=datetime.now(), message=f"Erro ao buscar dados da UTMify.", status=400)
 
     ads = response.data
+    if len(ads) < 1:
+      return ReportResponse(report_title="Write Utmify Ads - Error", generated_at=datetime.now(), message=f"Erro ao buscar dados da UTMify.", status=400)
+  
     def convert_to_list_of_lists(data):
       return [list(item.values()) for item in data]
 
@@ -34,7 +37,7 @@ def get_all_ads(day:str):
     worksheet.clear()
     next_row = 1
     worksheet.update(f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}", values_to_write)
-    return ReportResponse(report_title="Write Utmify Ads - Success", generated_at=datetime.now(), message="Success: UTMify Ads information has been written successfully!", status=200)
+    return ReportResponse(report_title="Write Utmify Ads - Success", generated_at=datetime.now(), message="Os dados dos anúncios foram escritos com sucesso!", status=200)
 
   except Exception as e:
     return ReportResponse(report_title="Write Utmify Ads - Error", generated_at=datetime.now(), message=f"Error: {str(e)}", status=400)

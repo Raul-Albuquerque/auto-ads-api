@@ -7,8 +7,9 @@ def currency_to_int(value: str):
   return int(cleaned_value) if cleaned_value.isdigit() else value
 
 def str_to_int(value: str):
-  if value.isdigit():
-    return int(value)
+  clean_value = value.replace(".", "").replace(",", "")
+  if clean_value.isdigit():
+    return int(clean_value)
   return value
 
 def percentage_to_float(value: str) -> float:
