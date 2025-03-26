@@ -18,7 +18,7 @@ dashboard_id = os.getenv("DASHBOARD_ID")
 
 def auth():
     url = f"{base_url}/users/auth"
-    basic_token = generate_basic_token(username=username, password=password)
+    basic_token = generate_basic_token(username=username, password=f"{password}#")
     headers = {"Authorization": basic_token}
 
     try:
