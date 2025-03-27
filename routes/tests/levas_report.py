@@ -70,6 +70,8 @@ def write_ads_levas_report():
           row += 1
           if (ad[6] == "⚙️ Testando" or ad[6] == "⏱️ Em validação") and ad[1] in ads_group:
             ad_name = ad[1]
+            current_hook = ad[12]
+            current_ctr = ad[13]
             new_revenue = 0
             new_spend = 0
             new_sales = 0
@@ -136,8 +138,8 @@ def write_ads_levas_report():
               file.write(f"Cliques UTMify: {new_link_clicks} - Cliques Ads: {ads_levas_current_clicks} - Total: {total_clicks}\n")
               file.write(f"Impressões UTMify: {new_impressions} - Impressões Ads: {ads_levas_current_impressions} - Total: {total_impressions}\n")
               file.write(f"Videos Views UTMify: {new_video_views} - Videos Views Ads: {ads_levas_current_video_views} - Total: {total_video_views}\n")
-              file.write(f"HOOK UTMify: {new_hook_rate} - Total: {round(total_hook, 4)}\n")
-              file.write(f"CTR UTMify: {new_ctr} - Total: {round(total_ctr, 4)}\n")
+              file.write(f"HOOK UTMify: {new_hook_rate} - Hook Ads: {current_hook} - Total: {round(total_hook, 4)}\n")
+              file.write(f"CTR UTMify: {new_ctr} - CTR Ads: {current_ctr} - Total: {round(total_ctr, 4)}\n")
               file.write(f"CPA Total: {formated_total_cpa} - ROAS Total: {formated_total_roas}\n")
               file.write(f"Atualizado em: {local_time}\n")
               file.write("-" * 40 + "\n")
