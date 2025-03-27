@@ -1,6 +1,6 @@
 front_products_list = [
-  "Fórmula del Amor Verdadero",
   "Programa Efecto Cleopatra",
-  "Get Her Back Formula",
-  "Aplicativo Pasión Obsesiva"
+  "Aplicativo Pasión Obsesiva",
+  "Macho App",
+  "Fórmula del Amor Verdadero"
 ]
