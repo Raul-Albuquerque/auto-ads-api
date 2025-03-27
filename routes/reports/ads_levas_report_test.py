@@ -15,7 +15,7 @@ timezone = pytz.timezone("America/Sao_Paulo")
 raw_local_time = datetime.now(timezone)
 local_time = raw_local_time.strftime("%d/%m/%Y às %Hh%Mmin%Ss")
 
-@router.get("/ads/report/levas/teste")
+@router.get("/ads/report/test")
 def write_ads_levas_report():
 
   try:
@@ -25,19 +25,19 @@ def write_ads_levas_report():
     ads = ads_worksheet.get_all_values()
     ads_df = pd.DataFrame(ads)
     ads_df = ads_df.drop(ads_df.columns[[0,1,2,3,4,5,6,7,8,10,11,12,14,15,16,17,19,20,21,22,23,25,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61]], axis=1)
-    ads_df[9] = ads_df[9].astype(str).apply(str_to_int) # SALES
-    ads_df[18] = ads_df[18].astype(str).apply(str_to_int) # REVENUE
-    ads_df[27] = ads_df[27].astype(str).apply(str_to_int) # SPEND
-    ads_df[24] = ads_df[24].astype(str).apply(str_to_int) # IMPRESSIONS
-    ads_df[26] = ads_df[26].astype(str).apply(str_to_int) # INLINELINKCLICKS
-    ads_df[45] = ads_df[45].astype(str).apply(str_to_int) # VIDEOVIEWS3S
-    ads_df[62] = ads_df[13].astype(str).apply(extract_ad_name) # AD NAME
-    ads_df[63] = ads_df[13].astype(str).apply(extract_offer_name) # OFFER
+    ads_df[9] = ads_df[9].replace('', '0').astype(str).apply(str_to_int) # SALES
+    ads_df[18] = ads_df[18].replace('', '0').astype(str).apply(str_to_int) # REVENUE
+    ads_df[27] = ads_df[27].replace('', '0').astype(str).apply(str_to_int) # SPEND
+    ads_df[24] = ads_df[24].replace('', '0').astype(str).apply(str_to_int) # IMPRESSIONS
+    ads_df[26] = ads_df[26].replace('', '0').astype(str).apply(str_to_int) # INLINELINKCLICKS
+    ads_df[45] = ads_df[45].replace('', '0').astype(str).apply(str_to_int) # VIDEOVIEWS3S
+    ads_df[62] = ads_df[13].replace('', '0').astype(str).apply(extract_ad_name) # AD NAME
+    ads_df[63] = ads_df[13].replace('', '0').astype(str).apply(extract_offer_name) # OFFER
     ads_group = ads_df.groupby(62).apply(lambda x: x.values.tolist())
     offer_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
 
-    traffic_spreadsheet = open_spreadsheet("LVH_ESP", "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG")
-    ads_levas_worksheet_index = search_worksheet_index("LVH_ESP", "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG", "Ads (levas)")
+    traffic_spreadsheet = open_spreadsheet("MAP_ESP", "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG")
+    ads_levas_worksheet_index = search_worksheet_index("MAP_ESP", "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG", "Ads (levas)")
     ads_levas_worksheet = traffic_spreadsheet.get_worksheet(ads_levas_worksheet_index)
     ads_levas_worksheet_data = ads_levas_worksheet.get_all_values()
     ads_levas_df = pd.DataFrame(ads_levas_worksheet_data)
@@ -48,6 +48,7 @@ def write_ads_levas_report():
     ads_levas_df[15] = ads_levas_df[15].astype(str).apply(str_to_int) # IMPRESSOES
     ads_levas_df[16] = ads_levas_df[16].astype(str).apply(str_to_int) # VIDEOS VIEWS
     ads_levas_list = ads_levas_df.values.tolist()
+    # return {"data": offer_group}
 
     for ad in ads_levas_list:
       if (ad[6] == "⚙️ Testando" or ad[6] == "⏱️ Em validação") and ad[1] in ads_group:
