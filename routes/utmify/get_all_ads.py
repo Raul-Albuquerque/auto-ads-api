@@ -3,6 +3,7 @@ from datetime import datetime
 from fastapi import APIRouter
 
 from models.report_models import ReportResponse
+from models.front_products_list import front_products_list
 from models.header_ads_list import header_ads
 from services.utmify import get_campaigns
 from services.google_sheets import open_spreadsheet, search_worksheet_index
@@ -16,7 +17,7 @@ def get_all_ads(day:str):
   name_contains = None
 
   try:
-    response = get_campaigns(day=day, name_contains=name_contains, products=None)
+    response = get_campaigns(day=day, name_contains=name_contains, products=front_products_list)
 
     if response.status == 400:
       print(response.message)
