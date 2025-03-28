@@ -97,6 +97,9 @@ def write_ads_levas_report():
               new_spend += item[5]
               new_video_views += item[6]
 
+            if new_spend == 0 or new_revenue == 0:
+              continue
+
             new_ctr = new_link_clicks / new_impressions if new_impressions > 0 else 0
             new_hook_rate = new_video_views / new_impressions if new_impressions > 0 else 0
             new_ctr = round(new_ctr, 4)
