@@ -3,6 +3,21 @@ active_offers_info = [
     "offer_name": "LVH_ESP"
   },
   {
+    "offer_name": "SDA_ENG"
+  },
+  {
+    "offer_name": "ECL_ESP"
+  },
+  {
+    "offer_name": "TDF_ESP"
+  },
+  {
+    "offer_name": "OBS_ESP"
+  },
+  {
+    "offer_name": "CRC_ESP"
+  },
+  {
     "offer_name": "MAP_ESP"
   },
   {
@@ -12,6 +27,18 @@ active_offers_info = [
     "offer_name": "OPA_ESP"
   },
   {
+    "offer_name": "OPA_ENG"
+  },
+  {
     "offer_name": "TNT_ENG"
+  },
+  {
+    "offer_name": "BJC_ENG"
+  },
+  {
+    "offer_name": "LOV_ESP"
+  },
+  {
+    "offer_name": "HSA_ESP"
   },
 ]
