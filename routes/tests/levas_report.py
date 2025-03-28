@@ -88,7 +88,7 @@ def write_ads_levas_report():
             new_video_views = 0
 
             for sales in sales_ads_group[ad_name]:
-              new_sales += item[0]
+              new_sales += sales[0]
 
             for item in ads_group[ad_name]:
               new_revenue += item[2]
