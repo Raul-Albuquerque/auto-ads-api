@@ -28,7 +28,6 @@ def write_ads_levas_report():
     ads_worksheet_index = search_worksheet_index("DB_3.0", spreadsheet_db_id, "RAW")
     ads_worksheet = ads_spreadsheet.get_worksheet(ads_worksheet_index)
     ads = ads_worksheet.get_all_values()
-    # return {"data": ads}
     ads_df = pd.DataFrame(ads)
     ads_df = ads_df.drop(ads_df.columns[[0,1,2,3,4,5,6,7,8,10,11,12,14,15,16,17,19,20,21,22,23,25,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61]], axis=1)
     ads_df[9] = ads_df[9].replace('', '0').astype(str).apply(str_to_int) # SALES
@@ -42,6 +41,17 @@ def write_ads_levas_report():
     ads_group = ads_df.groupby(62).apply(lambda x: x.values.tolist())
     offer_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
     # return {"data": offer_group}
+
+    sales_spreadsheet = open_spreadsheet("DB_3.0", spreadsheet_db_id)
+    sales_worksheet_index = search_worksheet_index("DB_3.0", spreadsheet_db_id, "RAW-SALES")
+    sales_worksheet = sales_spreadsheet.get_worksheet(sales_worksheet_index)
+    all_sales = sales_worksheet.get_all_values()
+    all_sales_df = pd.DataFrame(all_sales)
+    all_sales_df[9] = all_sales_df[9].replace('', '0').astype(str).apply(str_to_int) # SALES
+    all_sales_df[62] = all_sales_df[13].replace('', '0').astype(str).apply(extract_ad_name) # AD NAME
+    all_sales_df[63] = all_sales_df[13].replace('', '0').astype(str).apply(extract_offer_name) # OFFER
+    all_sales_df = all_sales_df.drop(all_sales_df.columns[[0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61]], axis=1)
+    sales_ads_group = all_sales_df.groupby(62).apply(lambda x: x.values.tolist())
 
     for item in active_offers_info:
       active_offer_name = item["offer_name"]
@@ -70,14 +80,15 @@ def write_ads_levas_report():
           row += 1
           if (ad[6] == "⚙️ Testando" or ad[6] == "⏱️ Em validação") and ad[1] in ads_group:
             ad_name = ad[1]
-            current_hook = ad[12]
-            current_ctr = ad[13]
             new_revenue = 0
             new_spend = 0
             new_sales = 0
             new_impressions = 0
             new_link_clicks = 0
-            new_video_views = 0        
+            new_video_views = 0
+
+            for sales in sales_ads_group[ad_name]:
+              new_sales += item[0]
 
             for item in ads_group[ad_name]:
               new_revenue += item[2]
@@ -85,7 +96,6 @@ def write_ads_levas_report():
               new_link_clicks += item[4]
               new_spend += item[5]
               new_video_views += item[6]
-              new_sales += item[0]
 
             new_ctr = new_link_clicks / new_impressions if new_impressions > 0 else 0
             new_hook_rate = new_video_views / new_impressions if new_impressions > 0 else 0
@@ -138,8 +148,8 @@ def write_ads_levas_report():
               file.write(f"Cliques UTMify: {new_link_clicks} - Cliques Ads: {ads_levas_current_clicks} - Total: {total_clicks}\n")
               file.write(f"Impressões UTMify: {new_impressions} - Impressões Ads: {ads_levas_current_impressions} - Total: {total_impressions}\n")
               file.write(f"Videos Views UTMify: {new_video_views} - Videos Views Ads: {ads_levas_current_video_views} - Total: {total_video_views}\n")
-              file.write(f"HOOK UTMify: {new_hook_rate} - Hook Ads: {current_hook} - Total: {round(total_hook, 4)}\n")
-              file.write(f"CTR UTMify: {new_ctr} - CTR Ads: {current_ctr} - Total: {round(total_ctr, 4)}\n")
+              file.write(f"HOOK UTMify: {new_hook_rate} - Total: {round(total_hook, 4)}\n")
+              file.write(f"CTR UTMify: {new_ctr} - Total: {round(total_ctr, 4)}\n")
               file.write(f"CPA Total: {formated_total_cpa} - ROAS Total: {formated_total_roas}\n")
               file.write(f"Atualizado em: {local_time}\n")
               file.write("-" * 40 + "\n")

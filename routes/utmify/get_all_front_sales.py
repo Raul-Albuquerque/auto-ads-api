@@ -29,14 +29,16 @@ def get_all_ads(day:str):
     def convert_to_list_of_lists(data):
       return [list(item.values()) for item in data]
 
-    ads_list = convert_to_list_of_lists(ads)
-    values_to_write = [lista[9] for lista in ads_list]
+    header = header_ads
+    values_to_write = convert_to_list_of_lists(ads)
+    values_to_write.insert(0, header)
     spreadsheet = open_spreadsheet("DB_3.0", "1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz")
-    worksheet_index = search_worksheet_index("DB_3.0", "1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz", "RAW")
+    worksheet_index = search_worksheet_index("DB_3.0", "1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz", "RAW-SALES")
     worksheet = spreadsheet.get_worksheet(worksheet_index)
-    next_row = 2
-    worksheet.update(f"J{next_row}:J{next_row + len(values_to_write) - 1}", [[value] for value in values_to_write])
-    return ReportResponse(report_title="Write Utmify Ads - Success", generated_at=datetime.now(), message="Vendas escritas com sucesso!", status=200)
+    worksheet.clear()
+    next_row = 1
+    worksheet.update(f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}", values_to_write)
+    return ReportResponse(report_title="Write Utmify Ads - Success", generated_at=datetime.now(), message="Os dados dos anúncios foram escritos com sucesso!", status=200)
 
   except Exception as e:
     return ReportResponse(report_title="Write Utmify Sales - Error", generated_at=datetime.now(), message=f"Error: {str(e)}", status=400)

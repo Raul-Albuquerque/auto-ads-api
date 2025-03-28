@@ -17,13 +17,15 @@ router = APIRouter()
 timezone = pytz.timezone("America/Sao_Paulo")
 raw_local_time = datetime.now(timezone)
 local_time = raw_local_time.strftime("%d/%m/%Y às %Hh%Mmin%Ss")
+spreadsheet_db_id="1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz"
+spreadsheet_active_offers_id="1u8RMIuvGNbsSYSVP_3Tvx0EHJ7sIyU5M"
 
 @router.get("/ads/report/levas")
 def write_ads_levas_report():
 
   try:
-    ads_spreadsheet = open_spreadsheet("DB_3.0", "1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz")
-    ads_worksheet_index = search_worksheet_index("DB_3.0", "1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz", "RAW")
+    ads_spreadsheet = open_spreadsheet("DB_3.0", spreadsheet_db_id)
+    ads_worksheet_index = search_worksheet_index("DB_3.0", spreadsheet_db_id, "RAW")
     ads_worksheet = ads_spreadsheet.get_worksheet(ads_worksheet_index)
     ads = ads_worksheet.get_all_values()
     ads_df = pd.DataFrame(ads)
@@ -40,16 +42,27 @@ def write_ads_levas_report():
     offer_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
     # return {"data": offer_group}
 
+    sales_spreadsheet = open_spreadsheet("DB_3.0", spreadsheet_db_id)
+    sales_worksheet_index = search_worksheet_index("DB_3.0", spreadsheet_db_id, "RAW-SALES")
+    sales_worksheet = sales_spreadsheet.get_worksheet(sales_worksheet_index)
+    all_sales = sales_worksheet.get_all_values()
+    all_sales_df = pd.DataFrame(all_sales)
+    all_sales_df[9] = all_sales_df[9].replace('', '0').astype(str).apply(str_to_int) # SALES
+    all_sales_df[62] = all_sales_df[13].replace('', '0').astype(str).apply(extract_ad_name) # AD NAME
+    all_sales_df[63] = all_sales_df[13].replace('', '0').astype(str).apply(extract_offer_name) # OFFER
+    all_sales_df = all_sales_df.drop(all_sales_df.columns[[0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61]], axis=1)
+    sales_ads_group = all_sales_df.groupby(62).apply(lambda x: x.values.tolist())
+
     for item in active_offers_info:
       active_offer_name = item["offer_name"]
       if active_offer_name in offer_group:
         print(f"{active_offer_name} teve ocorrencia")
         try:
-          trafic_spreadsheet = open_spreadsheet(active_offer_name, "1u8RMIuvGNbsSYSVP_3Tvx0EHJ7sIyU5M")
+          trafic_spreadsheet = open_spreadsheet(active_offer_name, spreadsheet_active_offers_id)
         except Exception as e:
           print(f"Erro ao abrir a planilha {active_offer_name}: {e}")
           continue  # Pula para a próxima oferta
-        ads_levas_worksheet_index = search_worksheet_index(active_offer_name, "1u8RMIuvGNbsSYSVP_3Tvx0EHJ7sIyU5M", "Ads (levas)")
+        ads_levas_worksheet_index = search_worksheet_index(active_offer_name, spreadsheet_active_offers_id, "Ads (levas)")
         ads_levas_worksheet = trafic_spreadsheet.get_worksheet(ads_levas_worksheet_index)
         ads_levas_worksheet_data = ads_levas_worksheet.get_all_values()
         print(f"Oferta {active_offer_name} no índice: {ads_levas_worksheet_index}")
@@ -72,7 +85,10 @@ def write_ads_levas_report():
             new_sales = 0
             new_impressions = 0
             new_link_clicks = 0
-            new_video_views = 0        
+            new_video_views = 0
+
+            for sales in sales_ads_group[ad_name]:
+              new_sales += item[0]
 
             for item in ads_group[ad_name]:
               new_revenue += item[2]
@@ -80,7 +96,6 @@ def write_ads_levas_report():
               new_link_clicks += item[4]
               new_spend += item[5]
               new_video_views += item[6]
-              new_sales += item[0]
 
             new_ctr = new_link_clicks / new_impressions if new_impressions > 0 else 0
             new_hook_rate = new_video_views / new_impressions if new_impressions > 0 else 0

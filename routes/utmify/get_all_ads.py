@@ -17,7 +17,7 @@ def get_all_ads(day:str):
   name_contains = None
 
   try:
-    response = get_campaigns(day=day, name_contains=name_contains, products=front_products_list)
+    response = get_campaigns(day=day, name_contains=name_contains, products=None)
 
     if response.status == 400:
       print(response.message)
