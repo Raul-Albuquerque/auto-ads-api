@@ -10,13 +10,12 @@ from core.numbers_cleaners import currency_to_int, str_to_int, percentage_to_flo
 from services.google_sheets import open_spreadsheet, search_worksheet_index
 
 router = APIRouter()
-
 timezone = pytz.timezone("America/Sao_Paulo")
-raw_local_time = datetime.now(timezone)
-local_time = raw_local_time.strftime("%d/%m/%Y às %Hh%Mmin%Ss")
 
 @router.get("/ads/report/test")
 def write_ads_levas_report():
+  raw_local_time = datetime.now(timezone)
+  local_time = raw_local_time.strftime("%d/%m/%Y às %Hh%Mmin%Ss")
 
   try:
     ads_spreadsheet = open_spreadsheet("DB_3.0", "1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz")
@@ -106,7 +105,7 @@ def write_ads_levas_report():
         ad[14] = total_clicks
         ad[15] = total_impressions
         ad[16] = total_video_views
-        ad[17] = local_time
+        ad[17] = local_time if local_time else ""
 
         # Exibindo os resultados
         print(f"Anúncio: {ad_name}")

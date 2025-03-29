@@ -15,13 +15,13 @@ from services.google_sheets import open_spreadsheet, search_worksheet_index
 router = APIRouter()
 
 timezone = pytz.timezone("America/Sao_Paulo")
-raw_local_time = datetime.now(timezone)
-local_time = raw_local_time.strftime("%d/%m/%Y às %Hh%Mmin%Ss")
 spreadsheet_db_id="1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz"
 spreadsheet_active_offers_id="1u8RMIuvGNbsSYSVP_3Tvx0EHJ7sIyU5M"
 
 @router.get("/ads/report/levas")
 def write_ads_levas_report():
+  raw_local_time = datetime.now(timezone)
+  local_time = raw_local_time.strftime("%d/%m/%Y às %Hh%Mmin%Ss")
 
   try:
     ads_spreadsheet = open_spreadsheet("DB_3.0", spreadsheet_db_id)
@@ -138,7 +138,7 @@ def write_ads_levas_report():
             ad[14] = total_clicks
             ad[15] = total_impressions
             ad[16] = total_video_views
-            ad[17] = local_time
+            ad[17] = local_time if local_time else ""
             
             folder = "email-reports"
             os.makedirs(folder, exist_ok=True)
