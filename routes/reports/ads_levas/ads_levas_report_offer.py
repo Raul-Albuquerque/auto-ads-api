@@ -4,16 +4,15 @@ from fastapi import APIRouter
 import pandas as pd
 
 from models.report_models import ReportResponse
-from core.helpers import get_average_rate
 from core.cleaners import extract_ad_name, extract_offer_name
-from core.numbers_cleaners import currency_to_int, str_to_int, percentage_to_float, percentage_to_float_from_utmify_hook, percentage_to_float_from_utmify_ctr, int_to_currency
+from core.numbers_cleaners import currency_to_int, str_to_int, int_to_currency
 from services.google_sheets import open_spreadsheet, search_worksheet_index
 
 router = APIRouter()
 timezone = pytz.timezone("America/Sao_Paulo")
 
-@router.get("/ads/report/test")
-def write_ads_levas_report():
+@router.get("/ads/report/levas/{offer}")
+def write_ads_levas_report(offer:str):
   raw_local_time = datetime.now(timezone)
   local_time = raw_local_time.strftime("%d/%m/%Y às %Hh%Mmin%Ss")
 
@@ -35,8 +34,8 @@ def write_ads_levas_report():
     ads_group = ads_df.groupby(62).apply(lambda x: x.values.tolist())
     offer_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
 
-    traffic_spreadsheet = open_spreadsheet("MAP_ESP", "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG")
-    ads_levas_worksheet_index = search_worksheet_index("MAP_ESP", "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG", "Ads (levas)")
+    traffic_spreadsheet = open_spreadsheet(offer, "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG")
+    ads_levas_worksheet_index = search_worksheet_index(offer, "1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG", "Ads (levas)")
     ads_levas_worksheet = traffic_spreadsheet.get_worksheet(ads_levas_worksheet_index)
     ads_levas_worksheet_data = ads_levas_worksheet.get_all_values()
     ads_levas_df = pd.DataFrame(ads_levas_worksheet_data)
@@ -126,7 +125,6 @@ def write_ads_levas_report():
     values_to_write_df[8] = values_to_write_df[8].apply(int_to_currency) # FATURAMENTO
     values_to_write_df[10] = values_to_write_df[10].apply(int_to_currency) # CPA
     values_to_write = values_to_write_df.values.tolist()
-    # return {"data": values_to_write}
     ads_levas_worksheet.clear()
     next_row = 1
     ads_levas_worksheet.update(f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}", values_to_write)

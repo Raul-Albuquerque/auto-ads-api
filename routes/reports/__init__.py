@@ -1,4 +1,1 @@
-from .ads_levas_report import router as report_router
-from .ads_levas_report_test import router as report_router_test
-
-report_router.include_router(report_router_test)
+from .ads_levas import ads_levas_report_router as report_router
