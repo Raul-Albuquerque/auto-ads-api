@@ -1,4 +1,4 @@
-from .levas_report import router as test_router
-from .offer_levas_report import router as offer_levas_router
+from .ads_levas_test import test_router
+from .total_aggregate_test import ads_total_router
 
-test_router.include_router(offer_levas_router)
+test_router.include_router(ads_total_router)

@@ -6,10 +6,10 @@ import numpy as np
 
 from models.report_models import ReportResponse
 from models.active_offers_info import active_offers_info
-from core.helpers import get_average_rate, delete_reports_folder
+from core.helpers import delete_reports_folder
 from services.gmail import send_email
 from core.cleaners import extract_ad_name, extract_offer_name
-from core.numbers_cleaners import currency_to_int, str_to_int, percentage_to_float, percentage_to_float_from_utmify_hook, percentage_to_float_from_utmify_ctr, int_to_currency
+from core.numbers_cleaners import currency_to_int, str_to_int, int_to_currency
 from services.google_sheets import open_spreadsheet, search_worksheet_index
 
 router = APIRouter()

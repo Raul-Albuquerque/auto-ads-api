@@ -1,0 +1,1 @@
+from .ads_total_report import router as ads_total_router
