@@ -116,7 +116,7 @@ def write_ads_total_report():
 
             folder = "email-reports"
             os.makedirs(folder, exist_ok=True)
-            filename = os.path.join(folder, f"{active_offer_name}.txt")
+            filename = os.path.join(folder, f"{active_offer_name}_TOTAL.txt")
             with open(filename, "a", encoding="utf-8") as file:
               file.write(f"Anúncio: {ad_name} - Na linha: {row}\n")
               file.write(f"Valor Gasto Utmify: {new_spend} - Valor Gasto Ads: {ads_total_current_spend} - Total: {total_spend}\n")
