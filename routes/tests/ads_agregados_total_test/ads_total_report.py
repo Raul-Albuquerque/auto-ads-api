@@ -135,7 +135,7 @@ def write_ads_total_report():
         next_row = 1
         ads_total_worksheet.update(f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}", values_to_write)
     
-    send_email("Relatórios de Ads Total")
+    send_email("Relatórios de Ads Total - teste")
     delete_reports_folder()
     return ReportResponse(report_title="Write Ads Total Report - Success", generated_at=datetime.now(), message=f"Ads Total was written successfully!", status=200)
 
