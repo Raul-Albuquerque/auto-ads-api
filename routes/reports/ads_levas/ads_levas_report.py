@@ -40,7 +40,6 @@ def write_ads_levas_report():
     ads_df[63] = ads_df[13].replace('', '0').astype(str).apply(extract_offer_name) # OFFER
     ads_group = ads_df.groupby(62).apply(lambda x: x.values.tolist())
     offer_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
-    # return {"data": offer_group}
 
     sales_spreadsheet = open_spreadsheet("DB_3.0", spreadsheet_db_id)
     sales_worksheet_index = search_worksheet_index("DB_3.0", spreadsheet_db_id, "RAW-SALES")
@@ -167,7 +166,7 @@ def write_ads_levas_report():
         next_row = 1
         ads_levas_worksheet.update(f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}", values_to_write)
         
-    send_email()
+    send_email("Relatórios de Ads Levas")
     delete_reports_folder()
     return ReportResponse(report_title="Write Ads Levas of all offers - Success", generated_at=datetime.now(), message=f"Relatórios escritos com sucesso!", status=200)
   except Exception as e:

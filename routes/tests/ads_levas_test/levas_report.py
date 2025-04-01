@@ -164,7 +164,7 @@ def write_ads_levas_report():
         next_row = 1
         ads_levas_worksheet.update(f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}", values_to_write)
         
-    send_email()
+    send_email("Relatórios de Ads Levas - teste")
     delete_reports_folder()
     return ReportResponse(report_title="Write Ads Levas of all offers - Success", generated_at=datetime.now(), message=f"Relatórios escritos com sucesso!", status=200)
   except Exception as e:

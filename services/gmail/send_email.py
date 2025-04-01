@@ -9,14 +9,14 @@ load_dotenv(override=True)
 username = os.getenv("EMAIL_USERNAME")
 password = os.getenv("EMAIL_PASSWORD")
 
-def send_email():
+def send_email(report_subject:str):
     # Configuração do servidor SMTP
     server = smtplib.SMTP(host="smtp.gmail.com", port=587)
     server.starttls()
     server.login(username, password)
 
     receiver = "automacaosiberia@gmail.com"
-    subject = "Relatórios Gerados"
+    subject = report_subject
 
     # Criando o e-mail
     msg = MIMEMultipart()
