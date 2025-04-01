@@ -77,7 +77,7 @@ def write_ads_total_report():
           row += 1
           ad_name = ad[0]
           
-          if ad_name == "" or ad[1] == "😞 Saturou" or ad_name not in ads_group:
+          if ad_name == "" or ad[1] == "😞 Saturou" or ad[1] == "" or ad_name not in ads_group:
             continue
 
           if ad_name in ads_group:
