@@ -68,7 +68,6 @@ def write_ads_total_report(active_offer_name:str):
       ads_total_df[3] = ads_total_df[3].astype(str).apply(currency_to_int) # FATURAMENTO
       ads_total_df[6] = ads_total_df[6].astype(str).apply(str_to_int) # vendas
       ads_total_list = ads_total_df.values.tolist()
-      # return {"ads": ads_total_list}
       row = 0
       for ad in ads_total_list:
         row += 1
@@ -80,6 +79,7 @@ def write_ads_total_report(active_offer_name:str):
         if ad_name in ads_group:
           new_revenue = 0
           new_spend = 0
+          new_sales = 0
 
           for sales in sales_ads_group[ad_name]:
             new_sales += sales[0]
@@ -127,7 +127,6 @@ def write_ads_total_report(active_offer_name:str):
       values_to_write_df[3] =  values_to_write_df[3].apply(int_to_currency) #FATURAMENTO
       values_to_write_df[5] = values_to_write_df[5].apply(int_to_currency) # CPA
       values_to_write = values_to_write_df.values.tolist()
-      return {"ads": values_to_write}
       ads_total_worksheet.clear()
       next_row = 1
       ads_total_worksheet.update(f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}", values_to_write)

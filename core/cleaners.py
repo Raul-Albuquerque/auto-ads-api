@@ -18,6 +18,15 @@ def extract_offer_name(ad_name: str) -> str:
     return match.group(0)
   return ""
 
+def extract_ad_d2d_status(fullname: str):
+  if re.search(r"\[PAUSADO\]", fullname, re.IGNORECASE):
+    return "paused"
+  return "active"
+
+def extract_ad_d2d_name(input_string: str) -> str:
+  match = re.match(r"([^\[]+)", input_string)
+  return match.group(1).strip() if match else input_string
+
 # test_list = [
 #     "LVH_ESP_AD41_H1",
 #     "LVH_ESP_AD08_H1_EMP17 1 1",

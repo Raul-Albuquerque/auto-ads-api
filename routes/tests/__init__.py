@@ -1,4 +1,6 @@
 from .ads_levas_test import test_router
 from .ads_agregados_total_test import ads_total_router
+from .ads_agregados_d2d_test import ads_d2d_router
 
 test_router.include_router(ads_total_router)
+test_router.include_router(ads_d2d_router)
