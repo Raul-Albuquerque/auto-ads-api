@@ -154,6 +154,14 @@ def write_ads_total_report(active_offer_name:str):
               file.write("-" * 40 + "\n")
             row += 6
 
+          else:
+            item[1].append(0)
+            item[2].append(0)
+            item[3].append(0)
+            item[4].append("")
+            item[5].append("")
+            row += 6
+
         for idx in range(1, len(item[1])):  
           item[1][idx] = int_to_currency(item[1][idx]) 
         for idx in range(1, len(item[2])):  
@@ -169,7 +177,7 @@ def write_ads_total_report(active_offer_name:str):
       ads_d2d_worksheet.update(f"A{next_row}:ZZ{next_row + len(data_to_write) - 1}", data_to_write)
     send_email("Relatórios de Ads D2D - Teste")
     delete_reports_folder()
-    return ReportResponse(report_title="Write Ads D2D Report - Success", generated_at=datetime.now(), message=f"Ads Total was written successfully!", status=200)
+    return ReportResponse(report_title="Write Ads D2D Report - Success", generated_at=datetime.now(), message=f"Ads D2D was written successfully!", status=200)
 
   except Exception as e:
-    return ReportResponse(report_title="Write Ads Total of all offers - Error", generated_at=datetime.now(), message=f"Error: {str(e)}", status=400)
+    return ReportResponse(report_title="Write Ads D2D Report - Error", generated_at=datetime.now(), message=f"Error: {str(e)}", status=400)

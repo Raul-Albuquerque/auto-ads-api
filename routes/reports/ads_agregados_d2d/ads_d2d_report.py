@@ -17,9 +17,9 @@ router = APIRouter()
 
 timezone = pytz.timezone("America/Sao_Paulo")
 spreadsheet_db_id="1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz"
-spreadsheet_active_offers_id="1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG"
+spreadsheet_active_offers_id="1u8RMIuvGNbsSYSVP_3Tvx0EHJ7sIyU5M"
 
-@router.get("/test/ads/d2d")
+@router.get("/ads/report/d2d")
 def write_ads_total_report():
   raw_local_time = datetime.now(timezone)
   local_date = raw_local_time.strftime("%d/%m/%Y")
@@ -177,7 +177,7 @@ def write_ads_total_report():
         next_row = 1
         ads_d2d_worksheet.update(f"A{next_row}:ZZ{next_row + len(data_to_write) - 1}", data_to_write)
 
-    send_email("Relatórios de Ads D2D - Teste")
+    send_email("Relatórios de Ads D2D")
     delete_reports_folder()
     return ReportResponse(report_title="Write Ads D2D Report - Success", generated_at=datetime.now(), message=f"Ads D2D was written successfully!", status=200)
 

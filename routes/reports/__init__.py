@@ -1,4 +1,6 @@
 from .ads_levas import ads_levas_report_router as report_router
 from .ads_agregados_total import ads_total_router
+from .ads_agregados_d2d import ads_d2d_router
 
 report_router.include_router(ads_total_router)
+report_router.include_router(ads_d2d_router)
