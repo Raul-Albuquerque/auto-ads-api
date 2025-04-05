@@ -1,4 +1,5 @@
 front_products_list = [
+  "Programa Frases del Amor",
   "Programa Efecto Cleopatra",
   "Aplicativo Pasión Obsesiva",
   "Macho App",

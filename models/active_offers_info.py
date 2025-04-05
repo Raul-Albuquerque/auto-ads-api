@@ -1,5 +1,8 @@
 active_offers_info = [
   {
+    "offer_name": "FDA_ESP"
+  },
+  {
     "offer_name": "LVH_ESP"
   },
   {
