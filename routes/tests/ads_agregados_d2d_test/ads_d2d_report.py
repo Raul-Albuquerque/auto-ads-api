@@ -7,6 +7,7 @@ import numpy as np
 
 from models.report_models import ReportResponse
 from models.active_offers_info import active_offers_info
+from models.ad_mock_list import ad_mock_list
 from core.helpers import delete_reports_folder, groupy_offer
 from services.gmail import send_email
 from core.cleaners import extract_ad_name, extract_offer_name, extract_ad_d2d_status, extract_ad_d2d_name
@@ -71,6 +72,8 @@ def write_ads_total_report():
           raw_ad_name = item[0][0]
           ad_name = extract_ad_d2d_name(raw_ad_name)
           ad_status = extract_ad_d2d_status(raw_ad_name)
+          if ad_name in ad_mock_list:
+            continue
           for idx in range(1, len(item[1])):  
             item[1][idx] = currency_to_int(item[1][idx]) 
           for idx in range(1, len(item[2])):  
