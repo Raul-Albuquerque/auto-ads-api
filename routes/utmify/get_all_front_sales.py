@@ -17,7 +17,7 @@ def get_all_ads(day:str):
   name_contains = None
 
   try:
-    response = get_campaigns(day=day, name_contains=name_contains, products=front_products_list)
+    response = get_campaigns(day=day, name_contains=name_contains, products=front_products_list, level="ad")
 
     if response.status == 400:
       return ReportResponse(report_title="Write Utmify Sales - Error", generated_at=datetime.now(), message=f"Erro ao buscar as vendas da UTMIfy", status=400)

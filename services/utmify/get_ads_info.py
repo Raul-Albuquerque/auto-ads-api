@@ -37,7 +37,7 @@ def auth():
         logger.error(f"Erro na autenticação: {e}")
         raise  # Propaga a exceção para ser tratada no nível superior
 
-def get_campaigns(day, name_contains=None, products=None):
+def get_campaigns(day, name_contains=None, products=None, level=str):
     url = f"{base_url}/orders/search-objects"
     
     try:
@@ -51,7 +51,7 @@ def get_campaigns(day, name_contains=None, products=None):
         }
 
         payload = {
-            "level": "ad",
+            "level": level,
             "adObjectStatuses": None,
             "metaAdAccountIds": None,
             "orderBy": "greater_profit",

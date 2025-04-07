@@ -1,4 +1,8 @@
 from .get_all_ads import router as utmify_router
 from .get_all_front_sales import router as all_sales_utmify_router
+from .get_all_campaigns import router as all_campaigns_router
+from .get_all_front_sales_campaigns import router as all_campaigns_sales_router
 
 utmify_router.include_router(all_sales_utmify_router)
+utmify_router.include_router(all_campaigns_router)
+utmify_router.include_router(all_campaigns_sales_router)
