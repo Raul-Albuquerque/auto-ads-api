@@ -1,5 +1,5 @@
 import pytz, os,csv
-from datetime import datetime
+from datetime import datetime, timedelta
 from fastapi import APIRouter
 from itertools import chain
 import pandas as pd
@@ -21,7 +21,7 @@ spreadsheet_active_offers_id="1z3YUtEjHVH5t5tppLyzSnw972WRbbDcG"
 
 @router.get("/test/ads/d2d/{active_offer_name}")
 def write_ads_total_report(active_offer_name:str):
-  raw_local_time = datetime.now(timezone)
+  raw_local_time = datetime.now(timezone) - timedelta(days=1)
   local_date = raw_local_time.strftime("%d/%m/%Y")
 
   try:
