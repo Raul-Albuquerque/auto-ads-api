@@ -50,4 +50,22 @@ def search_worksheet_index(title, folder_id, worksheet_name):
     return page_list.index(worksheet_name)
   return False
 
+def duplicate_template_sheet_to_end(spreadsheet, template_sheet_index, new_sheet_name):
+  template_sheet = spreadsheet.get_worksheet(template_sheet_index)
+  new_sheet = template_sheet.duplicate(new_sheet_name=new_sheet_name)
+  total_sheets = len(spreadsheet.worksheets())
+  spreadsheet.batch_update({
+    "requests": [{
+      "updateSheetProperties": {
+        "properties": {
+          "sheetId": new_sheet.id,
+          "index": total_sheets
+        },
+        "fields": "index"
+      }
+    }]
+  })
+
+  return spreadsheet.worksheet(new_sheet_name)
+
 
