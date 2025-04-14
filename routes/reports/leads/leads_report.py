@@ -17,7 +17,7 @@ timezone = pytz.timezone("America/Sao_Paulo")
 spreadsheet_db_id="1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz"
 spreadsheet_leads_folder_id="1ctHfPVHVF13Mg_PknwZo1NwSHYzxUoe6"
 
-@router.get("leads/report")
+@router.get("/leads/report")
 def write_ads_lead_report():
   raw_local_time = datetime.now(timezone)
   local_date = raw_local_time.strftime("%d/%m/%Y")
