@@ -15,7 +15,7 @@ router = APIRouter()
 
 timezone = pytz.timezone("America/Sao_Paulo")
 spreadsheet_db_id="1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz"
-spreadsheet_leads_folder_id="1ctHfPVHVF13Mg_PknwZo1NwSHYzxUoe6"
+spreadsheet_leads_folder_id="1nf4XGVts5_oSWHspspbj-6sm0jrIW86W"
 
 @router.get("/leads/report")
 def write_ads_lead_report():
