@@ -65,7 +65,7 @@ def write_ads_lead_report():
     except Exception as e:
       print(f"[ERRO] ao processar {e}")
       
-    send_email("Relatórios de Leads - Teste")
+    send_email("Relatórios de Leads")
     delete_reports_folder()
     return ReportResponse(report_title="Write leads report - Success", generated_at=datetime.now(), message=f"Relatórios de leads escritos com sucesso!", status=200)
   except Exception as e:

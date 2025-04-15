@@ -64,7 +64,7 @@ def write_ads_total_report():
           ads_d2d_worksheet = trafic_spreadsheet.get_worksheet(ads_d2d_worksheet_index)
         except Exception as e:
           print(f"Erro ao abrir a planilha {active_offer_name}: {e}")
-          # continue  # Pula para a próxima oferta
+          continue
         ads_d2d_worksheet_data = ads_d2d_worksheet.get_all_values()
         ads_d2d_group = groupy_offer(ads_d2d_worksheet_data)
         row = 1
@@ -109,7 +109,6 @@ def write_ads_total_report():
                 item[4].append("")
                 item[5].append("")
                 row += 6
-                continue
 
               new_cpa = int(new_spend / new_sales) if isinstance(new_spend, (int, float)) and isinstance(new_sales, (int, float)) and new_sales > 0 else 0
               new_roas = new_revenue / new_spend if isinstance(new_revenue, int) and isinstance(new_spend, int) and new_spend > 0 else 0
@@ -166,13 +165,16 @@ def write_ads_total_report():
               item[5].append("")
               row += 6
 
-          for idx in range(1, len(item[1])):  
-            item[1][idx] = int_to_currency(item[1][idx]) 
-          for idx in range(1, len(item[2])):  
-            item[2][idx] = int_to_currency(item[2][idx])
-          for idx in range(1, len(item[4])):  
-            item[4][idx] = int_to_currency(item[4][idx]) 
-
+        for bloco in ads_d2d_group:
+          investimento = bloco[1]
+          faturamento = bloco[2]
+          cpa = bloco[4] 
+          for idx in range(1, len(investimento)):
+            investimento[idx] = int_to_currency(investimento[idx])
+          for idx in range(1, len(faturamento)):
+            faturamento[idx] = int_to_currency(faturamento[idx])
+          for idx in range(1, len(cpa)):
+            cpa[idx] = int_to_currency(cpa[idx])
         # return {"ADS group": ads_d2d_group}
         data_to_write = list(chain(*ads_d2d_group))
         # return{"data": data_to_write}
