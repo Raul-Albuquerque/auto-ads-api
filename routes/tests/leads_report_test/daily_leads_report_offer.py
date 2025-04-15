@@ -1,5 +1,5 @@
 import pytz
-from datetime import datetime
+from datetime import datetime, timedelta
 from fastapi import APIRouter
 import pandas as pd
 
@@ -19,7 +19,7 @@ spreadsheet_leads_folder_id="1ctHfPVHVF13Mg_PknwZo1NwSHYzxUoe6"
 
 @router.get("/test/ads/leads")
 def write_ads_lead_report():
-  raw_local_time = datetime.now(timezone)
+  raw_local_time = datetime.now(timezone) - timedelta(days=1)
   local_date = raw_local_time.strftime("%d/%m/%Y")
 
   try:
