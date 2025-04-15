@@ -89,6 +89,7 @@ def write_ads_total_report():
             item[4].append("")
             item[5].append("")
             row += 6
+
           else:
             if ad_name in ads_group:
               new_revenue = 0
@@ -101,14 +102,6 @@ def write_ads_total_report():
               for item_ad in ads_group[ad_name]:
                 new_revenue += item_ad[2]
                 new_spend += item_ad[5]
-              
-              if new_spend == 0:
-                item[1].append(0)
-                item[2].append(0)
-                item[3].append(0)
-                item[4].append("")
-                item[5].append("")
-                row += 6
 
               new_cpa = int(new_spend / new_sales) if isinstance(new_spend, (int, float)) and isinstance(new_sales, (int, float)) and new_sales > 0 else 0
               new_roas = new_revenue / new_spend if isinstance(new_revenue, int) and isinstance(new_spend, int) and new_spend > 0 else 0
@@ -119,8 +112,12 @@ def write_ads_total_report():
               item[1].append(new_spend)
               item[2].append(new_revenue)
               item[3].append(new_sales)
-              item[4].append(new_cpa)
-              item[5].append(round(new_roas,4))
+              if new_spend > 0:
+                item[4].append(new_cpa)
+                item[5].append(round(new_roas,4))
+              else:
+                item[4].append("")
+                item[5].append("")
 
               for i in item[1][2:]:
                 daily_spend = i if isinstance(i, (int,float)) else 0
@@ -143,18 +140,19 @@ def write_ads_total_report():
               item[4][1] = total_cpa
               item[5][1] = round(total_roas,4)
 
-              folder = "email-reports"
-              os.makedirs(folder, exist_ok=True)
-              filename = os.path.join(folder, f"{active_offer_name}-d2d.txt")
-              with open(filename, "a", encoding="utf-8") as file:
-                file.write(f"Anúncio: {ad_name} - Na linha: {row}\n")
-                file.write(f"Valor Gasto Utmify: {new_spend} - Gasto Total: {int_to_currency(total_spend)}\n")
-                file.write(f"Valor Faturado Utmify: {new_revenue} - Faturamento Total: {int_to_currency(total_revenue)}\n")
-                file.write(f"Vendas UTMify: {new_sales} - Vendas Totais: {total_sales}\n")
-                file.write(f"Total CPA: {new_cpa} - Total CPA: {int_to_currency(total_cpa)}\n")
-                file.write(f"Total ROAS: {round(new_roas,4)} - Total ROAS: {round(total_roas,4)}\n")
-                file.write(f"Atualizado em: {local_date}\n")
-                file.write("-" * 40 + "\n")
+              if new_spend > 0:
+                folder = "email-reports"
+                os.makedirs(folder, exist_ok=True)
+                filename = os.path.join(folder, f"{active_offer_name}-d2d.txt")
+                with open(filename, "a", encoding="utf-8") as file:
+                  file.write(f"Anúncio: {ad_name} - Na linha: {row}\n")
+                  file.write(f"Valor Gasto Utmify: {new_spend} - Gasto Total: {int_to_currency(total_spend)}\n")
+                  file.write(f"Valor Faturado Utmify: {new_revenue} - Faturamento Total: {int_to_currency(total_revenue)}\n")
+                  file.write(f"Vendas UTMify: {new_sales} - Vendas Totais: {total_sales}\n")
+                  file.write(f"Total CPA: {new_cpa} - Total CPA: {int_to_currency(total_cpa)}\n")
+                  file.write(f"Total ROAS: {round(new_roas,4)} - Total ROAS: {round(total_roas,4)}\n")
+                  file.write(f"Atualizado em: {local_date}\n")
+                  file.write("-" * 40 + "\n")
               row += 6
             
             else:
