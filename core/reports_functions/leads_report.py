@@ -12,7 +12,7 @@ def generate_daily_report(spreadsheet_leads_folder_id: str, leads_info_group: an
     active_offer = active_offer_item['offer_name']
     try:
       leads_spreadsheet = open_spreadsheet(active_offer, spreadsheet_leads_folder_id)
-      leads_worksheet_index = search_worksheet_index(active_offer, spreadsheet_leads_folder_id, "Agregado")
+      leads_worksheet_index = search_worksheet_index(active_offer, spreadsheet_leads_folder_id, "Modelo")
       leads_worksheet = leads_spreadsheet.get_worksheet(leads_worksheet_index)
     except Exception as e:
       error_msg = f"Erro ao abrir a planilha {active_offer}: {e}"
@@ -95,7 +95,7 @@ def generate_consolidated_report(spreadsheet_leads_folder_id: str, leads_info_gr
     active_offer = active_offer_item['offer_name']
     try:
       leads_spreadsheet = open_spreadsheet(active_offer, spreadsheet_leads_folder_id)
-      leads_worksheet_index = search_worksheet_index(active_offer, spreadsheet_leads_folder_id, "Agregado")
+      leads_worksheet_index = search_worksheet_index(active_offer, spreadsheet_leads_folder_id, "Modelo")
       leads_worksheet = leads_spreadsheet.get_worksheet(leads_worksheet_index)
     except Exception as e:
       error_msg = f"Erro ao abrir a planilha {active_offer}: {e}"
