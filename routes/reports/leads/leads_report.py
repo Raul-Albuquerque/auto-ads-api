@@ -17,9 +17,9 @@ timezone = pytz.timezone("America/Sao_Paulo")
 spreadsheet_db_id="1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz"
 spreadsheet_leads_folder_id="1nf4XGVts5_oSWHspspbj-6sm0jrIW86W"
 
-@router.get("/leads/report")
-def write_ads_lead_report():
-  raw_local_time = datetime.now(timezone) - timedelta(days=1)
+@router.get("/leads/report/{period}")
+def write_ads_lead_report(period: str):
+  raw_local_time = datetime.now(timezone) - timedelta(days=1) if period == "yesterday" else datetime.now(timezone)
   local_date = raw_local_time.strftime("%d/%m/%Y")
 
   try:
@@ -56,11 +56,11 @@ def write_ads_lead_report():
         local_date=local_date
       )
 
-      generate_consolidated_report(
-        spreadsheet_leads_folder_id=spreadsheet_leads_folder_id,
-        leads_info_group=leads_info_group,
-        local_date=local_date
-      )
+      # generate_consolidated_report(
+      #   spreadsheet_leads_folder_id=spreadsheet_leads_folder_id,
+      #   leads_info_group=leads_info_group,
+      #   local_date=local_date
+      # )
 
     except Exception as e:
       print(f"[ERRO] ao processar {e}")
