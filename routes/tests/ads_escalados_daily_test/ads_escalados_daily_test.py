@@ -57,6 +57,6 @@ def write_ads_escalados_report():
       )
     except Exception as e:
       print(e)
-    return ReportResponse(report_title="Write leads report - Success", generated_at=datetime.now(), message=f"Relatórios de leads escritos com sucesso!", status=200)
+    return ReportResponse(report_title="Write leads report - Success", generated_at=datetime.now(), message=f"Relatórios de ads escalados escritos com sucesso!", status=200)
   except Exception as e:
     return ReportResponse(report_title="Write leads report - Error", generated_at=datetime.now(), message=f"Error: {str(e)}", status=400)
