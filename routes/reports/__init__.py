@@ -2,7 +2,9 @@ from .ads_levas import ads_levas_report_router as report_router
 from .ads_agregados_total import ads_total_router
 from .ads_agregados_d2d import ads_d2d_router
 from .leads import leads_report_router
+from .ads_escalados_daily import ads_escalados_daily_router
 
 report_router.include_router(ads_total_router)
 report_router.include_router(ads_d2d_router)
 report_router.include_router(leads_report_router)
+report_router.include_router(ads_escalados_daily_router)

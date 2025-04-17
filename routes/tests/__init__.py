@@ -3,7 +3,9 @@ from .ads_agregados_total_test import ads_total_router
 from .ads_agregados_d2d_test import ads_d2d_router
 
 from .leads_report_test import daily_leads_offer_test_router
+from .ads_escalados_daily_test import ads_escalados_daily_router
 
 test_router.include_router(ads_total_router)
 test_router.include_router(ads_d2d_router)
 test_router.include_router(daily_leads_offer_test_router)
+test_router.include_router(ads_escalados_daily_router)
