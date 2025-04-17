@@ -3,7 +3,7 @@ name: write ads every 2 hours
 on:
   schedule:
     # Horários em UTC: 11h → 03h (BRT)
-    - cron: "30 5 * * *" # UTC! 05:30h UTC é 02:30h BRT
+    - cron: "40 5 * * *" # Executa às 05:40 UTC = 02:40 BRT
   workflow_dispatch: # Permite execução manual
 
 jobs:
