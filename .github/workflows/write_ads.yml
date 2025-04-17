@@ -13,3 +13,5 @@ jobs:
       - name: request endpoint
         run: |
           curl -X GET https://automacao-nkh9m.ondigitalocean.app/write/ads/report
+      - name: Log hora atual (debug)
+        run: date -u
