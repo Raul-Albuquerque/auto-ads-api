@@ -18,7 +18,7 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
     error_msg = f"Erro ao abrir a planilha {active_offer}: {e}"
     print(error_msg)
 
-  for ad in ads_escalados[1:-3]:
+  for ad in ads_escalados[1:-2]:
     ad_name = "ADV+" if ad[0] == "CAMPANHAS ADV+ - TOP Ads" else ad[0]
     new_daily_budget = 0 
     new_sales = 0 
@@ -50,14 +50,14 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
     ad[8] = new_roas
     ad[9] = local_time
   
-  total_budget = sum([i[3] for i in ads_escalados[1:-3]])
-  total_spend = sum([i[4] for i in ads_escalados[1:-3]])
-  total_revenue = sum([i[5] for i in ads_escalados[1:-3]])
-  total_sales = sum([i[6] for i in ads_escalados[1:-3]])
+  total_budget = sum([i[3] for i in ads_escalados[1:-2]])
+  total_spend = sum([i[4] for i in ads_escalados[1:-2]])
+  total_revenue = sum([i[5] for i in ads_escalados[1:-2]])
+  total_sales = sum([i[6] for i in ads_escalados[1:-2]])
   total_cpa = int(total_spend / total_sales) if total_sales > 0 else 0
   total_roas = round(total_revenue / total_spend if total_revenue > 0 and total_spend > 0 else 0, 4)
   ads_escalados[-1] = ["AGREGADO","","",int_to_currency(total_budget), int_to_currency(total_spend), int_to_currency(total_revenue), total_sales, int_to_currency(total_cpa), total_roas,local_time]
-  for formatted_ads in ads_escalados[1:-3]:
+  for formatted_ads in ads_escalados[1:-2]:
     formatted_ads[3] = int_to_currency(formatted_ads[3])
     formatted_ads[4] = int_to_currency(formatted_ads[4])
     formatted_ads[5] = int_to_currency(formatted_ads[5])
