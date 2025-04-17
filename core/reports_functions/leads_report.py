@@ -88,7 +88,7 @@ def generate_daily_report(spreadsheet_leads_folder_id: str, leads_info_group: an
       daily_lead_worksheet.clear()
     next_row = 1
     daily_lead_worksheet.update(f"A{next_row}:ZZ{next_row + len(daily_lead_info) - 1}", daily_lead_info)
-    return ReportResponse(report_title="Daily Leads report function - Success", generated_at=datetime.now(), message=f"Função executada com sucesso!", status=200)
+  return ReportResponse(report_title="Daily Leads report function - Success", generated_at=datetime.now(), message=f"Função executada com sucesso!", status=200)
 
 def generate_consolidated_report(spreadsheet_leads_folder_id: str, leads_info_group: any, local_date):
   for active_offer_item in active_offers_info:
@@ -176,4 +176,4 @@ def generate_consolidated_report(spreadsheet_leads_folder_id: str, leads_info_gr
     daily_lead_info = ungroup_leads(leads_group)
     next_row = 1
     leads_worksheet.update(f"A{next_row}:ZZ{next_row + len(daily_lead_info) - 1}", daily_lead_info)
-    return ReportResponse(report_title="Agreggated Leads report function - Success", generated_at=datetime.now(), message=f"Função executada com sucesso!", status=200)
+  return ReportResponse(report_title="Agreggated Leads report function - Success", generated_at=datetime.now(), message=f"Função executada com sucesso!", status=200)
