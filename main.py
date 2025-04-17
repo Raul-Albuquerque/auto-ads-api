@@ -47,6 +47,6 @@ def schedule_job():
 scheduler = AsyncIOScheduler()
 
 # Roda a cada 2h das 8h até 00h
-scheduler.add_job(schedule_job, CronTrigger(hour=3, minute=11))
+scheduler.add_job(schedule_job, CronTrigger(hour=3, minute=15))
 
 scheduler.start()
