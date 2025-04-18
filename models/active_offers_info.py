@@ -1,5 +1,8 @@
 active_offers_info = [
   {
+    "offer_name": "LVF_ESP"
+  },
+  {
     "offer_name": "TMP_ESP"
   },
   {

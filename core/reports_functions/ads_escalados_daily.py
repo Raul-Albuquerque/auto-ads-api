@@ -40,9 +40,9 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
       new_cpa = 0
       new_roas = 0
       if ad_name in ads_group:        
+        new_spend = sum([spend[5] for spend in ads_group[ad_name] if spend[5] > 0])
         new_sales = sum([spend[1] for spend in ads_group[ad_name]])
-        new_revenue = sum([spend[4] for spend in ads_group[ad_name]])
-        new_spend = sum([spend[5] for spend in ads_group[ad_name]])
+        new_revenue = sum([spend[4] for spend in ads_group[ad_name] if spend[5] > 0])
         new_cpa = int(new_spend / new_sales) if new_sales > 0 else 0
         new_roas = round(new_revenue / new_spend if new_revenue > 0 and new_spend > 0 else 0, 2)
         folder = "email-reports"
@@ -63,7 +63,7 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
       ad[7] = new_cpa
       ad[8] = new_roas
       ad[9] = local_time
-
+    
     total_budget = sum([i[3] for i in ads_escalados[1:-1]])
     total_spend = sum([i[4] for i in ads_escalados[1:-1]])
     total_revenue = sum([i[5] for i in ads_escalados[1:-1]])
