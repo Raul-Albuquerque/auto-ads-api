@@ -47,7 +47,6 @@ def write_ads_escalados_report():
     ads_df[27] = ads_df[27].replace('', '0').astype(str).apply(str_to_int) # SPEND
     ads_df[62] = ads_df[13].replace("", "0").astype(str).apply(extract_ad_block) # AD NAME
     ads_group = ads_df.groupby(62).apply(lambda x: x.values.tolist())
-
     try:
       generate_ads_escalados_daily_report(
         spreadsheet_escalados_folder_id=spreadsheet_escalados_folder_id,
@@ -57,6 +56,6 @@ def write_ads_escalados_report():
       )
     except Exception as e:
       print(e)
-    return ReportResponse(report_title="Write leads report - Success", generated_at=datetime.now(), message=f"Relatórios de ads escalados escritos com sucesso!", status=200)
+    return ReportResponse(report_title="Daily Ads Escalados Report - Success", generated_at=datetime.now(), message=f"Relatório de Ads Escalados escrito com sucesso!", status=200)
   except Exception as e:
-    return ReportResponse(report_title="Write leads report - Error", generated_at=datetime.now(), message=f"Error: {str(e)}", status=400)
+    return ReportResponse(report_title="Daily Ads Escalados Report - Error", generated_at=datetime.now(), message=f"Error: {str(e)}", status=400)

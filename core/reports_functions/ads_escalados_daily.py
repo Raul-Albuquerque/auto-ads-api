@@ -21,9 +21,19 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
       print(error_msg)
       continue
 
+    ads_escalados_to_write_index = search_worksheet_index(active_offer, spreadsheet_escalados_folder_id, local_date)
+    is_ads_escalados_date_table_exists = True if ads_escalados_to_write_index else False
+    ads_escalados_current_data = ads_escalados_spreadsheet.get_worksheet(ads_escalados_to_write_index).get_all_values() if is_ads_escalados_date_table_exists else None
+    if ads_escalados_current_data:
+      ads_current_info = [ads for ads in ads_escalados_current_data[1:-1]]
+      for ad_current_info in ads_current_info:
+        ad_current_info[0] = "ADV+" if ad_current_info[0] == "CAMPANHAS ADV+ - TOP Ads" else active_offer if ad_current_info[0] == "TESTE DE VALIDAÇÃO DE CRIATIVO" else ad_current_info[0]
+        ad_current_info[3] = currency_to_int(ad_current_info[3])
+      ads_current_info_dict = {linha[0]: linha[3] for linha in ads_current_info}
+
     for ad in ads_escalados[1:-1]:
       ad_name = "ADV+" if ad[0] == "CAMPANHAS ADV+ - TOP Ads" else active_offer if ad[0] == "TESTE DE VALIDAÇÃO DE CRIATIVO" else ad[0]
-      current_budget = currency_to_int(ad[3])
+      current_budget = ads_current_info_dict[ad_name] if ads_escalados_current_data else 0
       new_sales = 0 
       new_spend = 0
       new_revenue = 0
@@ -32,7 +42,7 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
         new_revenue = sum([spend[4] for spend in ads_group[ad_name]])
         new_spend = sum([spend[5] for spend in ads_group[ad_name]])
         new_cpa = int(new_spend / new_sales) if new_sales > 0 else 0
-        new_roas = round(new_revenue / new_spend if new_revenue > 0 and new_spend > 0 else 0, 4)
+        new_roas = round(new_revenue / new_spend if new_revenue > 0 and new_spend > 0 else 0, 2)
         folder = "email-reports"
         os.makedirs(folder, exist_ok=True)
         filename = os.path.join(folder, f"{active_offer}_ads_escalados_daily.txt")
@@ -42,7 +52,7 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
           file.write(f"Faturou: {new_revenue} - Vendeu: {new_sales}\n")
           file.write(f"CPA: {new_cpa} - ROAS: {new_roas}\n")
           file.write("-" * 40 + "\n")
-      new_ad_name = "CAMPANHAS ADV+ - TOP Ads+" if ad_name == "ADV+" else "TESTE DE VALIDAÇÃO DE CRIATIVO" if ad_name == active_offer else ad_name
+      new_ad_name = "CAMPANHAS ADV+ - TOP Ads" if ad_name == "ADV+" else "TESTE DE VALIDAÇÃO DE CRIATIVO" if ad_name == active_offer else ad_name
       ad[0] = new_ad_name
       ad[3] = current_budget
       ad[4] = new_spend
@@ -57,7 +67,7 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
     total_revenue = sum([i[5] for i in ads_escalados[1:-1]])
     total_sales = sum([i[6] for i in ads_escalados[1:-1]])
     total_cpa = int(total_spend / total_sales) if total_sales > 0 else 0
-    total_roas = round(total_revenue / total_spend if total_revenue > 0 and total_spend > 0 else 0, 4)
+    total_roas = round(total_revenue / total_spend if total_revenue > 0 and total_spend > 0 else 0, 2)
     ads_escalados[-1] = ["AGREGADO","","",int_to_currency(total_budget), int_to_currency(total_spend), int_to_currency(total_revenue), total_sales, int_to_currency(total_cpa), total_roas,local_time]
     for formatted_ads in ads_escalados[1:-1]:
       formatted_ads[3] = int_to_currency(formatted_ads[3])
@@ -74,8 +84,7 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
         template_sheet_index=ads_escalados_worksheet_index,
         new_sheet_name=local_date
       )
-      
+    
     next_row = 1
-    ads_escalados_to_write.update(f"A{next_row}:ZZ{next_row + len(ads_escalados) - 1}", ads_escalados)
-      
+    ads_escalados_to_write.update(f"A{next_row}:ZZ{next_row + len(ads_escalados) - 1}", ads_escalados)      
   return ReportResponse(report_title="Daily Ads Escalados Report - Success", generated_at=datetime.now(), message=f"Relatório de Ads Escalados escrito com sucesso!", status=200)

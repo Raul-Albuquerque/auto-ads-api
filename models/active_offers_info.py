@@ -1,5 +1,8 @@
 active_offers_info = [
   {
+    "offer_name": "TMP_ESP"
+  },
+  {
     "offer_name": "TIN_ESP"
   },
   {
