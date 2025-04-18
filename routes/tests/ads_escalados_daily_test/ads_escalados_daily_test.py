@@ -49,13 +49,12 @@ def write_ads_escalados_report(period: str):
     ads_df[62] = ads_df[13].replace("", "0").astype(str).apply(extract_ad_block) # AD NAME
     ads_group = ads_df.groupby(62).apply(lambda x: x.values.tolist())
     try:
-      test = generate_ads_escalados_daily_report(
-          spreadsheet_escalados_folder_id=spreadsheet_escalados_folder_id,
-          ads_group=ads_group,
-          local_date=local_date,
-          local_time=local_time
-        )
-      return test
+      generate_ads_escalados_daily_report(
+        spreadsheet_escalados_folder_id=spreadsheet_escalados_folder_id,
+        ads_group=ads_group,
+        local_date=local_date,
+        local_time=local_time
+      )
     except Exception as e:
       print(e)
     return ReportResponse(report_title="Daily Ads Escalados Report - Success", generated_at=datetime.now(), message=f"Relatório de Ads Escalados escrito com sucesso!", status=200)
