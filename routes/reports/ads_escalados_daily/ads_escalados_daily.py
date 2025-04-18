@@ -1,5 +1,5 @@
 import pytz
-from datetime import datetime
+from datetime import datetime, timedelta
 from fastapi import APIRouter
 import pandas as pd
 
@@ -18,11 +18,12 @@ timezone = pytz.timezone("America/Sao_Paulo")
 spreadsheet_db_id="1kYakvWtJ-2G1Vu-ylxb4qYCzSoozMunz"
 spreadsheet_escalados_folder_id="1jNJiAMkMv1a3V0d0B6cWNWcXgMs6TMDq"
 
-@router.get("/ads/escalados/daily")
-def write_ads_escalados_report():
+@router.get("/ads/escalados/daily/{period}")
+def write_ads_escalados_report(period: str):
   raw_local_time = datetime.now(timezone)
+  raw_yesterday = raw_local_time - timedelta(days=1)
   local_time = raw_local_time.strftime("%d/%m/%Y às %Hh%Mmin%Ss")
-  local_date = raw_local_time.strftime("%d/%m/%Y")
+  local_date = raw_local_time.strftime("%d/%m/%Y") if period == "today" else raw_yesterday.strftime("%d/%m/%Y")
   try:
     sales_spreadsheet = open_spreadsheet("DB_3.0", spreadsheet_db_id)
     sales_worksheet_index = search_worksheet_index("DB_3.0", spreadsheet_db_id, "RAW-CAMPAIGNS-ESCALADOS-SALES")

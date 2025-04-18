@@ -37,6 +37,8 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
       new_sales = 0 
       new_spend = 0
       new_revenue = 0
+      new_cpa = 0
+      new_roas = 0
       if ad_name in ads_group:        
         new_sales = sum([spend[1] for spend in ads_group[ad_name]])
         new_revenue = sum([spend[4] for spend in ads_group[ad_name]])
