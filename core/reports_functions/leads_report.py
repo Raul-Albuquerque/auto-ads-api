@@ -56,14 +56,14 @@ def generate_daily_report(spreadsheet_leads_folder_id: str, leads_info_group: an
               file.write(f"Gastos UTMify: {new_spend}\n")
               file.write(f"Faturamento UTMify: {new_revenue}\n")
               file.write(f"Vendas UTMIfy: {new_sales}\n")
-              file.write(f"Novo CPA: {new_cpa} - Novo ROAS: {round(new_roas,4)} - Novo ARPU: {new_arpu}\n")
+              file.write(f"Novo CPA: {new_cpa} - Novo ROAS: {round(new_roas,2)} - Novo ARPU: {new_arpu}\n")
               file.write("-" * 40 + "\n")
           
           ad[2] = int_to_currency(new_spend)
           ad[3] = int_to_currency(new_revenue)
           ad[4] = new_sales 
           ad[5] = int_to_currency(new_cpa)
-          ad[6] = round(new_roas,4)
+          ad[6] = round(new_roas,2)
           ad[7] = int_to_currency(new_arpu)
 
         new_spend_amount = sum([item[2] for item in lead[7:]])
@@ -72,7 +72,7 @@ def generate_daily_report(spreadsheet_leads_folder_id: str, leads_info_group: an
         new_cpa_amount = int(new_spend_amount / new_sales_amount) if new_sales_amount > 0 else 0
         new_roas_amount = new_revenue_amount / new_spend_amount if new_revenue_amount > 0 and new_spend_amount > 0 else 0
         new_arpu_amount = int(new_revenue_amount / new_sales_amount) if new_sales_amount > 0 else 0
-        lead[4][:] = ["","",int_to_currency(new_spend_amount * 100),int_to_currency(new_revenue_amount * 100),new_sales_amount,new_cpa_amount,round(new_roas_amount,4),int_to_currency(new_arpu_amount)]
+        lead[4][:] = ["","",int_to_currency(new_spend_amount * 100),int_to_currency(new_revenue_amount * 100),new_sales_amount,new_cpa_amount,round(new_roas_amount,2),int_to_currency(new_arpu_amount)]
 
     daily_lead_info = ungroup_leads(leads_group)
     daily_lead_worksheet_index = search_worksheet_index(active_offer, spreadsheet_leads_folder_id, local_date)
@@ -154,15 +154,15 @@ def generate_consolidated_report(spreadsheet_leads_folder_id: str, leads_info_gr
               file.write(f"Gastos Atual: {current_spend} - Gastos UTMify: {new_spend} - Gasto Total: {total_spend}\n")
               file.write(f"Faturamento atual: {current_revenue} - faturamento UTMify: {new_revenue} - Faturamento Total: {total_revenue}\n")
               file.write(f"Vendas atuais: {current_sales} - Vendas UTMIfy: {new_sales} - Vendas total: {total_sales}\n")
-              file.write(f"Novo CPA: {new_cpa} - Novo ROAS: {round(new_roas,4)} - Novo ARPU: {new_arpu}\n")
-              file.write(f"Total CPA: {total_cpa} - Total ROAS: {round(total_roas,4)} - Total ARPU: {total_arpu}\n")
+              file.write(f"Novo CPA: {new_cpa} - Novo ROAS: {round(new_roas,2)} - Novo ARPU: {new_arpu}\n")
+              file.write(f"Total CPA: {total_cpa} - Total ROAS: {round(total_roas,2)} - Total ARPU: {total_arpu}\n")
               file.write("-" * 40 + "\n")
           
           ad[2] = int_to_currency(total_spend)
           ad[3] = int_to_currency(total_revenue)
           ad[4] = total_sales 
           ad[5] = int_to_currency(total_cpa)
-          ad[6] = round(total_roas,4)
+          ad[6] = round(total_roas,2)
           ad[7] = int_to_currency(total_arpu)
 
         new_spend_amount = sum([item[2] for item in lead[7:]])
@@ -171,7 +171,7 @@ def generate_consolidated_report(spreadsheet_leads_folder_id: str, leads_info_gr
         new_cpa_amount = int(new_spend_amount / new_sales_amount) if new_sales_amount > 0 else 0
         new_roas_amount = new_revenue_amount / new_spend_amount if new_revenue_amount > 0 and new_spend_amount > 0 else 0
         new_arpu_amount = int(new_revenue_amount / new_sales_amount) if new_sales_amount > 0 else 0
-        lead[4][:] = ["","",int_to_currency(new_spend_amount * 100),int_to_currency(new_revenue_amount * 100),new_sales_amount,new_cpa_amount,round(new_roas_amount,4),int_to_currency(new_arpu_amount)]
+        lead[4][:] = ["","",int_to_currency(new_spend_amount * 100),int_to_currency(new_revenue_amount * 100),new_sales_amount,new_cpa_amount,round(new_roas_amount,2),int_to_currency(new_arpu_amount)]
 
     daily_lead_info = ungroup_leads(leads_group)
     next_row = 1

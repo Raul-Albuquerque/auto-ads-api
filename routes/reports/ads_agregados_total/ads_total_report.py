@@ -104,7 +104,7 @@ def write_ads_total_report():
             total_sales = ads_total_current_sales + new_sales if isinstance(ads_total_current_sales, (int, float)) else ads_total_current_sales
             total_cpa = int(total_spend / total_sales) if isinstance(total_spend, (int, float)) and isinstance(total_sales, (int, float)) and total_sales > 0 else 0
             total_roas = total_revenue / total_spend if isinstance(total_revenue, int) and isinstance(total_spend, int) and total_spend > 0 else 0
-            formatted_total_roas = round(total_roas,4)
+            formatted_total_roas = round(total_roas,2)
             formatted_total_cpa = int_to_currency(total_cpa)
 
             ad[2] = total_spend

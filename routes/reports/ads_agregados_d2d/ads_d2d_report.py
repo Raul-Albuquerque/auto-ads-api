@@ -138,7 +138,7 @@ def write_ads_total_report():
               item[2][1] = total_revenue
               item[3][1] = total_sales
               item[4][1] = total_cpa
-              item[5][1] = round(total_roas,4)
+              item[5][1] = round(total_roas,2)
 
               if new_spend > 0:
                 folder = "email-reports"
@@ -150,7 +150,7 @@ def write_ads_total_report():
                   file.write(f"Valor Faturado Utmify: {new_revenue} - Faturamento Total: {int_to_currency(total_revenue)}\n")
                   file.write(f"Vendas UTMify: {new_sales} - Vendas Totais: {total_sales}\n")
                   file.write(f"Total CPA: {new_cpa} - Total CPA: {int_to_currency(total_cpa)}\n")
-                  file.write(f"Total ROAS: {round(new_roas,4)} - Total ROAS: {round(total_roas,4)}\n")
+                  file.write(f"Total ROAS: {round(new_roas,2)} - Total ROAS: {round(total_roas,2)}\n")
                   file.write(f"Atualizado em: {local_date}\n")
                   file.write("-" * 40 + "\n")
               row += 6
@@ -173,9 +173,7 @@ def write_ads_total_report():
             faturamento[idx] = int_to_currency(faturamento[idx])
           for idx in range(1, len(cpa)):
             cpa[idx] = int_to_currency(cpa[idx])
-        # return {"ADS group": ads_d2d_group}
         data_to_write = list(chain(*ads_d2d_group))
-        # return{"data": data_to_write}
         ads_d2d_worksheet.clear()
         next_row = 1
         ads_d2d_worksheet.update(f"A{next_row}:ZZ{next_row + len(data_to_write) - 1}", data_to_write)

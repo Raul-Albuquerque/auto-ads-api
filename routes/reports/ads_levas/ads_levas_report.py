@@ -101,8 +101,8 @@ def write_ads_levas_report():
 
             new_ctr = new_link_clicks / new_impressions if new_impressions > 0 else 0
             new_hook_rate = new_video_views / new_impressions if new_impressions > 0 else 0
-            new_ctr = round(new_ctr, 4)
-            new_hook_rate = round(new_hook_rate, 4)
+            new_ctr = round(new_ctr, 2)
+            new_hook_rate = round(new_hook_rate, 2)
 
             ads_levas_current_spend = ad[7]
             ads_levas_current_revenue = ad[8]
@@ -125,15 +125,15 @@ def write_ads_levas_report():
             formated_total_spend = int_to_currency(total_spend)
             formated_total_revenue = int_to_currency(total_revenue)
             formated_total_cpa = int_to_currency(total_cpa)
-            formated_total_roas = round(total_roas,4)
+            formated_total_roas = round(total_roas,2)
 
             ad[7] = total_spend
             ad[8] = total_revenue
             ad[9] = total_sales
             ad[10] = total_cpa
             ad[11] = formated_total_roas
-            ad[12] = round(total_hook,4)
-            ad[13] = round(total_ctr,4)
+            ad[12] = round(total_hook,2)
+            ad[13] = round(total_ctr,2)
             ad[14] = total_clicks
             ad[15] = total_impressions
             ad[16] = total_video_views
@@ -150,8 +150,8 @@ def write_ads_levas_report():
               file.write(f"Cliques UTMify: {new_link_clicks} - Cliques Ads: {ads_levas_current_clicks} - Total: {total_clicks}\n")
               file.write(f"Impressões UTMify: {new_impressions} - Impressões Ads: {ads_levas_current_impressions} - Total: {total_impressions}\n")
               file.write(f"Videos Views UTMify: {new_video_views} - Videos Views Ads: {ads_levas_current_video_views} - Total: {total_video_views}\n")
-              file.write(f"HOOK UTMify: {new_hook_rate} - Total: {round(total_hook, 4)}\n")
-              file.write(f"CTR UTMify: {new_ctr} - Total: {round(total_ctr, 4)}\n")
+              file.write(f"HOOK UTMify: {new_hook_rate} - Total: {round(total_hook, 2)}\n")
+              file.write(f"CTR UTMify: {new_ctr} - Total: {round(total_ctr, 2)}\n")
               file.write(f"CPA Total: {formated_total_cpa} - ROAS Total: {formated_total_roas}\n")
               file.write(f"Atualizado em: {local_time}\n")
               file.write("-" * 40 + "\n")
