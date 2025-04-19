@@ -37,14 +37,10 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
       new_sales = 0 
       new_spend = 0
       new_revenue = 0
-      new_cpa = 0
-      new_roas = 0
       if ad_name in ads_group:        
         new_spend = sum([spend[5] for spend in ads_group[ad_name] if spend[5] > 0])
         new_sales = sum([spend[1] for spend in ads_group[ad_name]])
         new_revenue = sum([spend[4] for spend in ads_group[ad_name] if spend[5] > 0])
-        new_cpa = int(new_spend / new_sales) if new_sales > 0 else 0
-        new_roas = round(new_revenue / new_spend if new_revenue > 0 and new_spend > 0 else 0, 2)
         folder = "email-reports"
         os.makedirs(folder, exist_ok=True)
         filename = os.path.join(folder, f"{active_offer}_ads_escalados_daily.txt")
@@ -52,7 +48,6 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
           file.write(f"O anúncio: {ad_name} - no dia: {local_date}\n")
           file.write(f"Gastou: {new_spend}\n")
           file.write(f"Faturou: {new_revenue} - Vendeu: {new_sales}\n")
-          file.write(f"CPA: {new_cpa} - ROAS: {new_roas}\n")
           file.write("-" * 40 + "\n")
       new_ad_name = "CAMPANHAS ADV+ - TOP Ads" if ad_name == "ADV+" else "TESTE DE VALIDAÇÃO DE CRIATIVO" if ad_name == active_offer else ad_name
       ad[0] = new_ad_name
@@ -60,22 +55,25 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
       ad[4] = new_spend
       ad[5] = new_revenue
       ad[6] = new_sales
-      ad[7] = new_cpa
-      ad[8] = new_roas
+      row = ads_escalados.index(ad) + 1
+      ad[7] = f'=SE(G{row}>0;E{row}/G{row};0)' 
+      ad[8] = f'=SE(F{row}>0;F{row}/E{row};0)'
       ad[9] = local_time
     
-    total_budget = sum([i[3] for i in ads_escalados[1:-1]])
-    total_spend = sum([i[4] for i in ads_escalados[1:-1]])
-    total_revenue = sum([i[5] for i in ads_escalados[1:-1]])
-    total_sales = sum([i[6] for i in ads_escalados[1:-1]])
-    total_cpa = int(total_spend / total_sales) if total_sales > 0 else 0
-    total_roas = round(total_revenue / total_spend if total_revenue > 0 and total_spend > 0 else 0, 2)
-    ads_escalados[-1] = ["AGREGADO","","",int_to_currency(total_budget), int_to_currency(total_spend), int_to_currency(total_revenue), total_sales, int_to_currency(total_cpa), total_roas,local_time]
     for formatted_ads in ads_escalados[1:-1]:
       formatted_ads[3] = int_to_currency(formatted_ads[3])
       formatted_ads[4] = int_to_currency(formatted_ads[4])
       formatted_ads[5] = int_to_currency(formatted_ads[5])
-      formatted_ads[7] = int_to_currency(formatted_ads[7])
+      ads_escalados[-1] = [
+        "AGREGADO", "", "", 
+        f"=SOMA(D2:D{row})",  # Total Budget
+        f"=SOMA(E2:E{row})",  # Total Spend
+        f"=SOMA(F2:F{row})",  # Total Revenue
+        f"=SOMA(G2:G{row})",  # Total Sales
+        f"=SE(G{row+1}>0;E{row+1}/G{row+1};0)",  # CPA = Total Spend / Total Sales
+        f"=SE(E{row+1}>0;F{row+1}/E{row+1};0)",  # ROAS = Total Revenue / Total Spend
+        local_time
+      ]
     ads_escalados_to_write_index = search_worksheet_index(active_offer, spreadsheet_escalados_folder_id, local_date)
     if ads_escalados_to_write_index:
       ads_escalados_to_write = ads_escalados_spreadsheet.get_worksheet(ads_escalados_to_write_index)
@@ -88,5 +86,9 @@ def generate_ads_escalados_daily_report(spreadsheet_escalados_folder_id: str, ad
       )
     
     next_row = 1
-    ads_escalados_to_write.update(f"A{next_row}:ZZ{next_row + len(ads_escalados) - 1}", ads_escalados)      
+    ads_escalados_to_write.update(
+      f"A{next_row}:ZZ{next_row + len(ads_escalados) - 1}",
+      ads_escalados,
+      value_input_option="USER_ENTERED"
+    )     
   return ReportResponse(report_title="Daily Ads Escalados Report - Success", generated_at=datetime.now(), message=f"Relatório de Ads Escalados escrito com sucesso!", status=200)
