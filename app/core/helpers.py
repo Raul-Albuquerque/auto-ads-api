@@ -34,3 +34,10 @@ def delete_reports_folder(folder="email-reports"):
         print(f"Pasta '{folder}' e seus arquivos foram removidos com sucesso.")
     else:
         print(f"Pasta '{folder}' não encontrada.")
+
+
+def groupy_offer(lista_de_listas, tamanho_grupo=6):
+    return [
+        lista_de_listas[i : i + tamanho_grupo]
+        for i in range(0, len(lista_de_listas), tamanho_grupo)
+    ]

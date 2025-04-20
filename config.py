@@ -43,6 +43,7 @@ REPORT_TYPE_FRONT_SALES_WORKSHEETS = {
 REPORT_WORKSHEETS = {
     "ads_levas": "Ads (levas)",
     "ads_agregado": "Ads Escalados (Agreg.)",
+    "ads_d2d": "Ads Escalados (d2d)",
 }
 
 # SPREADSHEETS PROD
