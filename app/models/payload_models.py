@@ -7,5 +7,6 @@ class UtmifyFilters(BaseModel):
     period: str  # today | yesterday
 
 
-class AdsLevasReport(BaseModel):
+class AdsControlReport(BaseModel):
+    report_type: str  # ads_levas | ads_agregado
     active_offer: str  # all | nome da oferta em maíusculo
