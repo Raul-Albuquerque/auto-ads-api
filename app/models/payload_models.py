@@ -8,5 +8,11 @@ class UtmifyFilters(BaseModel):
 
 
 class AdsControlReport(BaseModel):
-    report_type: str  # ads_levas | ads_agregado
+    report_type: str  # controle_ads | leads | escalados
+    active_offer: str  # all | nome da oferta em maíusculo
+
+
+class LeadsReport(BaseModel):
+    report_type: str  # controle_ads | leads | escalados
+    period: str  # today | yesterday
     active_offer: str  # all | nome da oferta em maíusculo
