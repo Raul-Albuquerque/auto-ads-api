@@ -44,12 +44,16 @@ REPORT_WORKSHEETS = {
     "ads_levas": "Ads (levas)",
     "ads_agregado": "Ads Escalados (Agreg.)",
     "ads_d2d": "Ads Escalados (d2d)",
+    "leads": "Modelo",
+    "escalados": "MODELO",
 }
 
 # SPREADSHEETS PROD
 # SPREADSHEET_CONTROLE_ADS_ID = os.getenv("SPREADSHEET_CONTROLE_ADS_ID")
 # SPREADSHEET_LEADS_ID = os.getenv("SPREADSHEET_LEADS_ID")
+# SPREADSHEET_ESCALADOS_ID = os.getenv("SPREADSHEET_ESCALADOS_ID")
 
 # SPREADSHEETS DEV
 SPREADSHEET_CONTROLE_ADS_ID = os.getenv("DEV_SPREADSHEET_CONTROLE_ADS_ID")
 SPREADSHEET_LEADS_ID = os.getenv("DEV_SPREADSHEET_LEADS_ID")
+SPREADSHEET_ESCALADOS_ID = os.getenv("DEV_SPREADSHEET_ESCALADOS_ID")

@@ -16,3 +16,7 @@ class LeadsReport(BaseModel):
     report_type: str  # controle_ads | leads | escalados
     period: str  # today | yesterday
     active_offer: str  # all | nome da oferta em maíusculo
+
+
+class EscaladosReport(LeadsReport):
+    pass

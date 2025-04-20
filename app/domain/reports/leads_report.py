@@ -28,6 +28,7 @@ from config import (
     REPORT_TYPE_DATA_WORKSHEETS,
     REPORT_TYPE_FRONT_SALES_WORKSHEETS,
     SPREADSHEET_LEADS_ID,
+    REPORT_WORKSHEETS,
 )
 
 
@@ -44,7 +45,7 @@ def all_leads_report(report_type: str, period: str):
         sales_worksheet_index = search_worksheet_index(
             DB_SPREADSHEET,
             DB_SPREADSHEET_FOLDER_ID,
-            REPORT_TYPE_DATA_WORKSHEETS[report_type],
+            REPORT_TYPE_FRONT_SALES_WORKSHEETS[report_type],
         )
         sales_worksheet = sales_spreadsheet.get_worksheet(sales_worksheet_index)
         all_sales = sales_worksheet.get_all_values()
@@ -127,7 +128,7 @@ def all_leads_report(report_type: str, period: str):
         campaigns_worksheet_index = search_worksheet_index(
             DB_SPREADSHEET,
             DB_SPREADSHEET_FOLDER_ID,
-            REPORT_TYPE_FRONT_SALES_WORKSHEETS[report_type],
+            REPORT_TYPE_DATA_WORKSHEETS[report_type],
         )
         campaigns_worksheet = campaigns_spreadsheet.get_worksheet(
             campaigns_worksheet_index
@@ -225,7 +226,7 @@ def all_leads_report(report_type: str, period: str):
             try:
                 leads_spreadsheet = open_spreadsheet(active_offer, SPREADSHEET_LEADS_ID)
                 leads_worksheet_index = search_worksheet_index(
-                    active_offer, SPREADSHEET_LEADS_ID, "Modelo"
+                    active_offer, SPREADSHEET_LEADS_ID, REPORT_WORKSHEETS[report_type]
                 )
                 leads_worksheet = leads_spreadsheet.get_worksheet(leads_worksheet_index)
             except Exception as e:
@@ -549,7 +550,7 @@ def leads_report(report_type: str, period: str, active_offer: str):
         try:
             leads_spreadsheet = open_spreadsheet(active_offer, SPREADSHEET_LEADS_ID)
             leads_worksheet_index = search_worksheet_index(
-                active_offer, SPREADSHEET_LEADS_ID, "Modelo"
+                active_offer, SPREADSHEET_LEADS_ID, REPORT_WORKSHEETS[report_type]
             )
             leads_worksheet = leads_spreadsheet.get_worksheet(leads_worksheet_index)
         except Exception as e:
