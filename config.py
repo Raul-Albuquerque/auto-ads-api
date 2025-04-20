@@ -29,3 +29,8 @@ REPORT_TYPE_DATA_WORKSHEETS = {
     "leads": "RAW-CAMPAIGNS",
     "escalados": "RAW-CAMPAIGNS-ESCALADOS",
 }
+REPORT_TYPE_FRONT_SALES_WORKSHEETS = {
+    "controle_ads": "RAW-SALES",
+    "leads": "RAW-CAMPAIGNS-SALES",
+    "escalados": "RAW-CAMPAIGNS-ESCALADOS-SALES",
+}

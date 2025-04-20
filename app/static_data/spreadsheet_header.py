@@ -1,4 +1,4 @@
-spreadsheet_header = [
+SPREADSHEET_HEADER = [
     "id",
     "profileId",
     "accountId",
