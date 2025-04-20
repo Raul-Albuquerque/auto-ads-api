@@ -1,4 +1,4 @@
-import base64
+import base64, os, shutil
 from datetime import datetime, timedelta
 
 from config import TIMEZONE
@@ -26,3 +26,11 @@ def generate_basic_token(username: str, password: str) -> str:
     token = f"Basic {token_bytes.decode('utf-8')}"
 
     return token
+
+
+def delete_reports_folder(folder="email-reports"):
+    if os.path.exists(folder):
+        shutil.rmtree(folder)
+        print(f"Pasta '{folder}' e seus arquivos foram removidos com sucesso.")
+    else:
+        print(f"Pasta '{folder}' não encontrada.")
