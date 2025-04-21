@@ -1,0 +1,8 @@
+ADS_MOCK_LIST = [
+    "NOME_DO_AD01",
+    "NOME_DO_AD02",
+    "NOME_DO_AD03",
+    "NOME_DO_AD04",
+    "NOME_DO_AD05",
+    "NOME_DO_AD06",
+]

@@ -1,4 +1,4 @@
-header_ads = [
+SPREADSHEET_HEADER = [
     "id",
     "profileId",
     "accountId",
