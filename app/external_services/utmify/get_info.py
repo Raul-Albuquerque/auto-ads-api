@@ -11,8 +11,7 @@ logger = logging.getLogger(__name__)
 
 def auth():
     url = f"{BASE_URL}/users/auth"
-    # basic_token = generate_basic_token(username=USERNAME, password=f"{PASSWORD}#")
-    basic_token = generate_basic_token(username=USERNAME, password=f"{PASSWORD}")
+    basic_token = generate_basic_token(username=USERNAME, password=f"{PASSWORD}#")
     headers = {"Authorization": basic_token}
 
     try:
