@@ -1,12 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import (
-    utmify_router,
-    report_router,
-    health_router,
-    test_router,
-    vturb_router,
-)
+from routes import utmify_router, report_router, health_router, test_router
 
 from app.api.v1 import api_v1_router
 
@@ -24,6 +18,5 @@ app.include_router(utmify_router)
 app.include_router(report_router)
 app.include_router(health_router)
 app.include_router(test_router)
-app.include_router(vturb_router)
 
 app.include_router(api_v1_router, prefix="/api/v1")

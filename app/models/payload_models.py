@@ -20,3 +20,8 @@ class LeadsReport(BaseModel):
 
 class EscaladosReport(LeadsReport):
     pass
+
+
+class VturbFilters(BaseModel):
+    period: str  # today | yesterday
+    report_type: str

@@ -1,4 +1,5 @@
 import base64, os, shutil
+from typing import List, Dict, Any
 from datetime import datetime, timedelta
 
 from config import TIMEZONE
@@ -110,3 +111,35 @@ def ungroup_leads(grupos):
             listas_reconstruidas[i].extend(bloco)
 
     return listas_reconstruidas
+
+
+def get_date_range(period: str) -> dict:
+    if period == "today":
+        target_date = datetime.now()
+    elif period == "yesterday":
+        target_date = datetime.now() - timedelta(days=1)
+    else:
+        raise ValueError("Período inválido. Use 'today' ou 'yesterday'.")
+
+    start = target_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    end = target_date.replace(hour=23, minute=59, second=59, microsecond=0)
+
+    return {
+        "start_date": start.strftime("%Y-%m-%d %H:%M:%S"),
+        "end_date": end.strftime("%Y-%m-%d %H:%M:%S"),
+    }
+
+
+def convert_stats_to_list(data: List[Dict[str, Any]]) -> List[List[Any]]:
+    return [
+        [
+            item["player_id"],
+            item["name"].strip(),
+            item["totalUniqDeviceEvents"],
+            item["total_over_pitch"],
+            item["total_under_pitch"],
+            item["error"],
+        ]
+        for item in data
+        if not item.get("error")
+    ]
