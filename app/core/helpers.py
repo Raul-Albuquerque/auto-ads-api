@@ -143,3 +143,10 @@ def convert_stats_to_list(data: List[Dict[str, Any]]) -> List[List[Any]]:
         for item in data
         if not item.get("error")
     ]
+
+
+def get_all_players_id(players_by_offer: dict):
+    players_id_list = []
+    for players in players_by_offer.values():
+        players_id_list.extend(players)
+    return players_id_list

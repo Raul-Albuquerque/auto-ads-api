@@ -5,8 +5,8 @@ from auth import get_api_key
 from app.models.payload_models import VturbFilters
 from app.models.report_model import ReportResponse
 from app.external_services.vturb import get_all_player_data
-from app.static_data.player_id_list import PLAYERS_ID_LIST
-from app.core.helpers import get_date_range, convert_stats_to_list
+from app.static_data.players_by_offer import PLAYERS_BY_OFFER
+from app.core.helpers import get_date_range, convert_stats_to_list, get_all_players_id
 from app.external_services.google_sheets import open_spreadsheet, search_worksheet_index
 from config import (
     TIMEZONE,
@@ -21,8 +21,9 @@ router = APIRouter()
 @router.post("/vturb")
 def write_player_stats(filters: VturbFilters, api_key: str = Depends(get_api_key)):
     try:
+        players_id_list = get_all_players_id(PLAYERS_BY_OFFER)
         period = get_date_range(filters.period)
-        response = get_all_player_data(period=period, player_ids=PLAYERS_ID_LIST)
+        response = get_all_player_data(period=period, player_ids=players_id_list)
         worksheet_name = REPORT_TYPE_DATA_WORKSHEETS[filters.report_type]
 
         if response.status == 400:
