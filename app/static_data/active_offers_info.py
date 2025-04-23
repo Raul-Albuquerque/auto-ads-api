@@ -1,4 +1,6 @@
 ACTIVE_OFFERS_INFO = [
+    {"offer_name": "MSG_ESP"},
+    {"offer_name": "TDB_ESP"},
     {"offer_name": "LVF_ESP"},
     {"offer_name": "TMP_ESP"},
     {"offer_name": "TIN_ESP"},
