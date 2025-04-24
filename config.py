@@ -37,11 +37,13 @@ REPORT_TYPE_DATA_WORKSHEETS = {
     "leads": "RAW-CAMPAIGNS",
     "escalados": "RAW-CAMPAIGNS-ESCALADOS",
     "vturb": "Vturb",
+    "yt_ads": "YT_Ads",
 }
 REPORT_TYPE_FRONT_SALES_WORKSHEETS = {
     "controle_ads": "RAW-SALES",
     "leads": "RAW-CAMPAIGNS-SALES",
     "escalados": "RAW-CAMPAIGNS-ESCALADOS-SALES",
+    "yt_ads": "YT_Ads_Sales",
 }
 
 # REPORT WORKSHEETS

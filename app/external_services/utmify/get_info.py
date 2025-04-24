@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 def auth():
     url = f"{BASE_URL}/users/auth"
-    basic_token = generate_basic_token(username=USERNAME, password=f"{PASSWORD}#")
+    basic_token = generate_basic_token(username=USERNAME, password=f"{PASSWORD}")
     headers = {"Authorization": basic_token}
 
     try:
@@ -31,8 +31,14 @@ def auth():
         raise
 
 
-def get_data(day: str, name_contains=None, products=None, level=str):
-    url = f"{BASE_URL}/orders/search-objects"
+def get_data(
+    day: str, level: str, ad_plataform: str, name_contains=None, products=None
+):
+    url = (
+        f"{BASE_URL}/orders/search-objects"
+        if ad_plataform == "meta"
+        else f"{BASE_URL}/orders/search-objects/google"
+    )
 
     try:
         token = auth()
@@ -44,16 +50,29 @@ def get_data(day: str, name_contains=None, products=None, level=str):
             "Content-Type": "application/json",
         }
 
-        payload = {
-            "level": level,
-            "adObjectStatuses": None,
-            "metaAdAccountIds": None,
-            "orderBy": "greater_profit",
-            "dashboardId": DASHBOARD_ID,
-            "dateRange": {"from": start_date, "to": end_date},
-            "nameContains": name_contains,
-            "productNames": products,
-        }
+        payload = (
+            {
+                "level": level,
+                "adObjectStatuses": None,
+                "metaAdAccountIds": None,
+                "orderBy": "greater_profit",
+                "dashboardId": DASHBOARD_ID,
+                "dateRange": {"from": start_date, "to": end_date},
+                "nameContains": name_contains,
+                "productNames": products,
+            }
+            if ad_plataform == "meta"
+            else {
+                "level": level,
+                "adAccountIds": None,
+                "orderBy": "greater_profit",
+                "dashboardId": DASHBOARD_ID,
+                "dateRange": {"from": start_date, "to": end_date},
+                "nameContains": name_contains,
+                "productNames": products,
+                "status": None,
+            }
+        )
 
         logger.info(f"Enviando requisição para {url}")
         logger.debug(f"Headers: {headers}")

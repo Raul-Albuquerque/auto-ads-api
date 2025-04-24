@@ -5,6 +5,7 @@ class UtmifyFilters(BaseModel):
     level: str  # ad | campaign
     report_type: str  # controle_ads | leads | escalados
     period: str  # today | yesterday
+    plataform: str  # meta | yt_ads
 
 
 class AdsControlReport(BaseModel):
@@ -20,6 +21,13 @@ class LeadsReport(BaseModel):
 
 class EscaladosReport(LeadsReport):
     pass
+
+
+class TrafficControlReport(BaseModel):
+    report_type: str  # controle_ads | leads | escalados
+    period: str  # today | yesterday
+    active_offer: str  # all | nome da oferta em maíusculo
+    plataform: str
 
 
 class VturbFilters(BaseModel):

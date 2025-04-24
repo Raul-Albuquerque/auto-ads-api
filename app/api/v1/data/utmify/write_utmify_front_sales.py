@@ -5,7 +5,11 @@ from auth import get_api_key
 from app.models.report_model import ReportResponse
 from app.models.payload_models import UtmifyFilters
 from app.external_services.utmify import get_data
-from app.static_data import SPREADSHEET_HEADER, FRONT_PRODUCT_LIST
+from app.static_data import (
+    SPREADSHEET_HEADER,
+    FRONT_PRODUCT_LIST,
+    YT_ADS_SPREADSHEET_HEADER,
+)
 from app.external_services.google_sheets import open_spreadsheet, search_worksheet_index
 from config import (
     TIMEZONE,
@@ -24,11 +28,20 @@ async def write_utmify_front_sales(
     level = filters.level
     report_type = filters.report_type
     period = filters.period
-    worksheet_name = REPORT_TYPE_FRONT_SALES_WORKSHEETS[report_type]
+    ad_plataform = filters.plataform
+    worksheet_name = (
+        REPORT_TYPE_FRONT_SALES_WORKSHEETS[report_type]
+        if ad_plataform == "meta"
+        else REPORT_TYPE_FRONT_SALES_WORKSHEETS[ad_plataform]
+    )
 
     try:
         response = get_data(
-            day=period, products=FRONT_PRODUCT_LIST, level=level, name_contains=None
+            day=period,
+            products=FRONT_PRODUCT_LIST,
+            level=level,
+            name_contains=None,
+            ad_plataform=ad_plataform,
         )
 
         if response.status == 400:
@@ -54,7 +67,10 @@ async def write_utmify_front_sales(
             return [list(item.values()) for item in data]
 
         values_to_write = convert_to_list_of_lists(ads)
-        values_to_write.insert(0, SPREADSHEET_HEADER)
+        spreadsheet_header = (
+            SPREADSHEET_HEADER if ad_plataform == "meta" else YT_ADS_SPREADSHEET_HEADER
+        )
+        values_to_write.insert(0, spreadsheet_header)
         spreadsheet = open_spreadsheet(DB_SPREADSHEET, DB_SPREADSHEET_FOLDER_ID)
         worksheet_index = search_worksheet_index(
             DB_SPREADSHEET, DB_SPREADSHEET_FOLDER_ID, worksheet_name

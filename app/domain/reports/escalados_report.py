@@ -41,78 +41,11 @@ def all_ads_escalados_report(report_type: str, period: str):
         sales_worksheet = sales_spreadsheet.get_worksheet(sales_worksheet_index)
         all_sales = sales_worksheet.get_all_values()
         all_sales_df = pd.DataFrame(all_sales)
-        all_sales_df[9] = (
-            all_sales_df[9].replace("", "0").astype(str).apply(str_to_int)
+        all_sales_df[10] = (
+            all_sales_df[10].replace("", "0").astype(str).apply(str_to_int)
         )  # SALES
-        all_sales_df = all_sales_df.drop(
-            all_sales_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    13,
-                    14,
-                    15,
-                    16,
-                    17,
-                    18,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    24,
-                    25,
-                    26,
-                    27,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    45,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
+        all_sales_df = all_sales_df[all_sales_df.columns[[3, 10]]]
         sales_ads_list = all_sales_df.groupby(3).apply(lambda x: x.values.tolist())
-
         campaigns_spreadsheet = open_spreadsheet(
             DB_SPREADSHEET, DB_SPREADSHEET_FOLDER_ID
         )
@@ -127,82 +60,20 @@ def all_ads_escalados_report(report_type: str, period: str):
         campaigns = campaigns_worksheet.get_all_values()
         for campaign in campaigns[1:]:
             campaign_id = campaign[3]
-            campaign[9] = sales_ads_list[campaign_id][0][1]
+            campaign[10] = sales_ads_list[campaign_id][0][1]
         ads_df = pd.DataFrame(campaigns)
-        ads_df = ads_df.drop(
-            ads_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    14,
-                    15,
-                    17,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    24,
-                    25,
-                    26,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    45,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
-        ads_df[16] = (
-            ads_df[16].replace("", "0").astype(str).apply(str_to_int)
+        ads_df = ads_df[ads_df.columns[[3, 10, 14, 17, 19, 28]]]
+        ads_df[17] = (
+            ads_df[17].replace("", "0").astype(str).apply(str_to_int)
         )  # DAILY BUDGET
-        ads_df[18] = (
-            ads_df[18].replace("", "0").astype(str).apply(str_to_int)
+        ads_df[19] = (
+            ads_df[19].replace("", "0").astype(str).apply(str_to_int)
         )  # REVENUE
-        ads_df[27] = ads_df[27].replace("", "0").astype(str).apply(str_to_int)  # SPEND
-        ads_df[62] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_ad_block)
+        ads_df[28] = ads_df[28].replace("", "0").astype(str).apply(str_to_int)  # SPEND
+        ads_df[63] = (
+            ads_df[14].replace("", "0").astype(str).apply(extract_ad_block)
         )  # AD NAME
-        ads_group = ads_df.groupby(62).apply(lambda x: x.values.tolist())
+        ads_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
 
         for active_offer_item in ACTIVE_OFFERS_INFO:
             active_offer = active_offer_item["offer_name"]
@@ -252,7 +123,6 @@ def all_ads_escalados_report(report_type: str, period: str):
                 ads_current_info_dict = {
                     linha[0]: linha[3] for linha in ads_current_info
                 }
-
             for ad in ads_escalados[1:-1]:
                 ad_name = (
                     "ADV+"
@@ -273,9 +143,9 @@ def all_ads_escalados_report(report_type: str, period: str):
                     new_spend = sum(
                         [spend[5] for spend in ads_group[ad_name] if spend[5] > 0]
                     )
-                    new_sales = sum([spend[1] for spend in ads_group[ad_name]])
+                    new_sales = sum([sales[1] for sales in ads_group[ad_name]])
                     new_revenue = sum(
-                        [spend[4] for spend in ads_group[ad_name] if spend[5] > 0]
+                        [revenue[4] for revenue in ads_group[ad_name] if revenue[5] > 0]
                     )
                     folder = "email-reports"
                     os.makedirs(folder, exist_ok=True)
@@ -329,7 +199,6 @@ def all_ads_escalados_report(report_type: str, period: str):
                 ads_escalados_to_write = ads_escalados_spreadsheet.get_worksheet(
                     ads_escalados_to_write_index
                 )
-                ads_escalados_to_write.clear()
             else:
                 ads_escalados_to_write = duplicate_template_sheet_to_end(
                     spreadsheet=ads_escalados_spreadsheet,
@@ -344,12 +213,6 @@ def all_ads_escalados_report(report_type: str, period: str):
                 value_input_option="USER_ENTERED",
             )
 
-        return ReportResponse(
-            report_title="Write ads escalados report - Success",
-            generated_at=datetime.now(),
-            message=f"Relatórios de ads escalados escritos com sucesso!",
-            status=200,
-        )
     except Exception as e:
         return ReportResponse(
             report_title="Write ads escalados report - Error",
@@ -378,78 +241,11 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
         sales_worksheet = sales_spreadsheet.get_worksheet(sales_worksheet_index)
         all_sales = sales_worksheet.get_all_values()
         all_sales_df = pd.DataFrame(all_sales)
-        all_sales_df[9] = (
-            all_sales_df[9].replace("", "0").astype(str).apply(str_to_int)
+        all_sales_df[10] = (
+            all_sales_df[10].replace("", "0").astype(str).apply(str_to_int)
         )  # SALES
-        all_sales_df = all_sales_df.drop(
-            all_sales_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    13,
-                    14,
-                    15,
-                    16,
-                    17,
-                    18,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    24,
-                    25,
-                    26,
-                    27,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    45,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
+        all_sales_df = all_sales_df[all_sales_df.columns[[3, 10]]]
         sales_ads_list = all_sales_df.groupby(3).apply(lambda x: x.values.tolist())
-
         campaigns_spreadsheet = open_spreadsheet(
             DB_SPREADSHEET, DB_SPREADSHEET_FOLDER_ID
         )
@@ -464,83 +260,20 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
         campaigns = campaigns_worksheet.get_all_values()
         for campaign in campaigns[1:]:
             campaign_id = campaign[3]
-            campaign[9] = sales_ads_list[campaign_id][0][1]
+            campaign[10] = sales_ads_list[campaign_id][0][1]
         ads_df = pd.DataFrame(campaigns)
-        ads_df = ads_df.drop(
-            ads_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    14,
-                    15,
-                    17,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    24,
-                    25,
-                    26,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    45,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
-        ads_df[16] = (
-            ads_df[16].replace("", "0").astype(str).apply(str_to_int)
+        ads_df = ads_df[ads_df.columns[[3, 10, 14, 17, 19, 28]]]
+        ads_df[17] = (
+            ads_df[17].replace("", "0").astype(str).apply(str_to_int)
         )  # DAILY BUDGET
-        ads_df[18] = (
-            ads_df[18].replace("", "0").astype(str).apply(str_to_int)
+        ads_df[19] = (
+            ads_df[19].replace("", "0").astype(str).apply(str_to_int)
         )  # REVENUE
-        ads_df[27] = ads_df[27].replace("", "0").astype(str).apply(str_to_int)  # SPEND
-        ads_df[62] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_ad_block)
+        ads_df[28] = ads_df[28].replace("", "0").astype(str).apply(str_to_int)  # SPEND
+        ads_df[63] = (
+            ads_df[14].replace("", "0").astype(str).apply(extract_ad_block)
         )  # AD NAME
-        ads_group = ads_df.groupby(62).apply(lambda x: x.values.tolist())
-
+        ads_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
         try:
             ads_escalados_spreadsheet = open_spreadsheet(
                 active_offer, SPREADSHEET_ESCALADOS_ID
@@ -584,7 +317,6 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
                 )
                 ad_current_info[3] = currency_to_int(ad_current_info[3])
             ads_current_info_dict = {linha[0]: linha[3] for linha in ads_current_info}
-
         for ad in ads_escalados[1:-1]:
             ad_name = (
                 "ADV+"
@@ -603,9 +335,9 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
                 new_spend = sum(
                     [spend[5] for spend in ads_group[ad_name] if spend[5] > 0]
                 )
-                new_sales = sum([spend[1] for spend in ads_group[ad_name]])
+                new_sales = sum([sales[1] for sales in ads_group[ad_name]])
                 new_revenue = sum(
-                    [spend[4] for spend in ads_group[ad_name] if spend[5] > 0]
+                    [revenue[4] for revenue in ads_group[ad_name] if revenue[5] > 0]
                 )
                 folder = "email-reports"
                 os.makedirs(folder, exist_ok=True)
@@ -636,43 +368,42 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
             ad[8] = f"=SE(F{row}>0;F{row}/E{row};0)"
             ad[9] = local_time
 
-            for formatted_ads in ads_escalados[1:-1]:
-                formatted_ads[3] = int_to_currency(formatted_ads[3])
-                formatted_ads[4] = int_to_currency(formatted_ads[4])
-                formatted_ads[5] = int_to_currency(formatted_ads[5])
-                ads_escalados[-1] = [
-                    "AGREGADO",
-                    "",
-                    "",
-                    f"=SOMA(D2:D{row})",  # Total Budget
-                    f"=SOMA(E2:E{row})",  # Total Spend
-                    f"=SOMA(F2:F{row})",  # Total Revenue
-                    f"=SOMA(G2:G{row})",  # Total Sales
-                    f"=SE(G{row+1}>0;E{row+1}/G{row+1};0)",  # CPA = Total Spend / Total Sales
-                    f"=SE(E{row+1}>0;F{row+1}/E{row+1};0)",  # ROAS = Total Revenue / Total Spend
-                    local_time,
-                ]
-            ads_escalados_to_write_index = search_worksheet_index(
-                active_offer, SPREADSHEET_ESCALADOS_ID, local_date
+        for formatted_ads in ads_escalados[1:-1]:
+            formatted_ads[3] = int_to_currency(formatted_ads[3])
+            formatted_ads[4] = int_to_currency(formatted_ads[4])
+            formatted_ads[5] = int_to_currency(formatted_ads[5])
+            ads_escalados[-1] = [
+                "AGREGADO",
+                "",
+                "",
+                f"=SOMA(D2:D{row})",  # Total Budget
+                f"=SOMA(E2:E{row})",  # Total Spend
+                f"=SOMA(F2:F{row})",  # Total Revenue
+                f"=SOMA(G2:G{row})",  # Total Sales
+                f"=SE(G{row+1}>0;E{row+1}/G{row+1};0)",  # CPA = Total Spend / Total Sales
+                f"=SE(E{row+1}>0;F{row+1}/E{row+1};0)",  # ROAS = Total Revenue / Total Spend
+                local_time,
+            ]
+        ads_escalados_to_write_index = search_worksheet_index(
+            active_offer, SPREADSHEET_ESCALADOS_ID, local_date
+        )
+        if ads_escalados_to_write_index:
+            ads_escalados_to_write = ads_escalados_spreadsheet.get_worksheet(
+                ads_escalados_to_write_index
             )
-            if ads_escalados_to_write_index:
-                ads_escalados_to_write = ads_escalados_spreadsheet.get_worksheet(
-                    ads_escalados_to_write_index
-                )
-                ads_escalados_to_write.clear()
-            else:
-                ads_escalados_to_write = duplicate_template_sheet_to_end(
-                    spreadsheet=ads_escalados_spreadsheet,
-                    template_sheet_index=ads_escalados_worksheet_index,
-                    new_sheet_name=local_date,
-                )
+        else:
+            ads_escalados_to_write = duplicate_template_sheet_to_end(
+                spreadsheet=ads_escalados_spreadsheet,
+                template_sheet_index=ads_escalados_worksheet_index,
+                new_sheet_name=local_date,
+            )
 
-            next_row = 1
-            ads_escalados_to_write.update(
-                f"A{next_row}:ZZ{next_row + len(ads_escalados) - 1}",
-                ads_escalados,
-                value_input_option="USER_ENTERED",
-            )
+        next_row = 1
+        ads_escalados_to_write.update(
+            f"A{next_row}:ZZ{next_row + len(ads_escalados) - 1}",
+            ads_escalados,
+            value_input_option="USER_ENTERED",
+        )
 
         return ReportResponse(
             report_title="Write ads escalados report - Success",

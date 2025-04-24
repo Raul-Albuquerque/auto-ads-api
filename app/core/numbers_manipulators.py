@@ -23,3 +23,10 @@ def int_to_currency(value: int):
         return value / 100.0
     except (ValueError, TypeError):
         return value
+
+
+def extract_int(value: str) -> int:
+    match = re.match(r"^(\d+)(,\d+)?$", value)
+    if match:
+        return int(match.group(1))
+    return value
