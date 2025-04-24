@@ -32,87 +32,26 @@ def all_ads_levas_report(report_type: str):
         ads_worksheet = ads_spreadsheet.get_worksheet(ads_worksheet_index)
         ads = ads_worksheet.get_all_values()
         ads_df = pd.DataFrame(ads)
-        ads_df = ads_df.drop(
-            ads_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    14,
-                    15,
-                    16,
-                    17,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    25,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
-        ads_df[9] = ads_df[9].replace("", "0").astype(str).apply(str_to_int)  # SALES
-        ads_df[18] = (
-            ads_df[18].replace("", "0").astype(str).apply(str_to_int)
+        ads_df = ads_df[ads_df.columns[[10, 14, 19, 25, 27, 28, 46]]]
+        ads_df[10] = ads_df[10].replace("", "0").astype(str).apply(str_to_int)  # SALES
+        ads_df[19] = (
+            ads_df[19].replace("", "0").astype(str).apply(str_to_int)
         )  # REVENUE
-        ads_df[27] = ads_df[27].replace("", "0").astype(str).apply(str_to_int)  # SPEND
-        ads_df[24] = (
-            ads_df[24].replace("", "0").astype(str).apply(str_to_int)
+        ads_df[28] = ads_df[28].replace("", "0").astype(str).apply(str_to_int)  # SPEND
+        ads_df[25] = (
+            ads_df[25].replace("", "0").astype(str).apply(str_to_int)
         )  # IMPRESSIONS
-        ads_df[26] = (
-            ads_df[26].replace("", "0").astype(str).apply(str_to_int)
+        ads_df[27] = (
+            ads_df[27].replace("", "0").astype(str).apply(str_to_int)
         )  # INLINELINKCLICKS
-        ads_df[45] = (
-            ads_df[45].replace("", "0").astype(str).apply(str_to_int)
+        ads_df[46] = (
+            ads_df[46].replace("", "0").astype(str).apply(str_to_int)
         )  # VIDEOVIEWS3S
         ads_df[62] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_ad_name)
+            ads_df[14].replace("", "0").astype(str).apply(extract_ad_name)
         )  # AD NAME
         ads_df[63] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_offer_name)
+            ads_df[14].replace("", "0").astype(str).apply(extract_offer_name)
         )  # OFFER
         ads_group = ads_df.groupby(62).apply(lambda x: x.values.tolist())
         offer_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
@@ -126,83 +65,16 @@ def all_ads_levas_report(report_type: str):
         sales_worksheet = sales_spreadsheet.get_worksheet(sales_worksheet_index)
         all_sales = sales_worksheet.get_all_values()
         all_sales_df = pd.DataFrame(all_sales)
-        all_sales_df[9] = (
-            all_sales_df[9].replace("", "0").astype(str).apply(str_to_int)
+        all_sales_df[10] = (
+            all_sales_df[10].replace("", "0").astype(str).apply(str_to_int)
         )  # SALES
         all_sales_df[62] = (
-            all_sales_df[13].replace("", "0").astype(str).apply(extract_ad_name)
+            all_sales_df[14].replace("", "0").astype(str).apply(extract_ad_name)
         )  # AD NAME
         all_sales_df[63] = (
-            all_sales_df[13].replace("", "0").astype(str).apply(extract_offer_name)
+            all_sales_df[14].replace("", "0").astype(str).apply(extract_offer_name)
         )  # OFFER
-        all_sales_df = all_sales_df.drop(
-            all_sales_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    13,
-                    14,
-                    15,
-                    16,
-                    17,
-                    18,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    24,
-                    25,
-                    26,
-                    27,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    45,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
+        all_sales_df = all_sales_df[all_sales_df.columns[[10, 62, 63]]]
         sales_ads_group = all_sales_df.groupby(62).apply(lambda x: x.values.tolist())
 
         for item in ACTIVE_OFFERS_INFO:
@@ -449,87 +321,26 @@ def ads_levas_report(active_offer: str, report_type: str):
         ads_worksheet = ads_spreadsheet.get_worksheet(ads_worksheet_index)
         ads = ads_worksheet.get_all_values()
         ads_df = pd.DataFrame(ads)
-        ads_df = ads_df.drop(
-            ads_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    14,
-                    15,
-                    16,
-                    17,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    25,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
-        ads_df[9] = ads_df[9].replace("", "0").astype(str).apply(str_to_int)  # SALES
-        ads_df[18] = (
-            ads_df[18].replace("", "0").astype(str).apply(str_to_int)
+        ads_df = ads_df[ads_df.columns[[10, 14, 19, 25, 27, 28, 46]]]
+        ads_df[10] = ads_df[10].replace("", "0").astype(str).apply(str_to_int)  # SALES
+        ads_df[19] = (
+            ads_df[19].replace("", "0").astype(str).apply(str_to_int)
         )  # REVENUE
-        ads_df[27] = ads_df[27].replace("", "0").astype(str).apply(str_to_int)  # SPEND
-        ads_df[24] = (
-            ads_df[24].replace("", "0").astype(str).apply(str_to_int)
+        ads_df[28] = ads_df[28].replace("", "0").astype(str).apply(str_to_int)  # SPEND
+        ads_df[25] = (
+            ads_df[25].replace("", "0").astype(str).apply(str_to_int)
         )  # IMPRESSIONS
-        ads_df[26] = (
-            ads_df[26].replace("", "0").astype(str).apply(str_to_int)
+        ads_df[27] = (
+            ads_df[27].replace("", "0").astype(str).apply(str_to_int)
         )  # INLINELINKCLICKS
-        ads_df[45] = (
-            ads_df[45].replace("", "0").astype(str).apply(str_to_int)
+        ads_df[46] = (
+            ads_df[46].replace("", "0").astype(str).apply(str_to_int)
         )  # VIDEOVIEWS3S
         ads_df[62] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_ad_name)
+            ads_df[14].replace("", "0").astype(str).apply(extract_ad_name)
         )  # AD NAME
         ads_df[63] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_offer_name)
+            ads_df[14].replace("", "0").astype(str).apply(extract_offer_name)
         )  # OFFER
         ads_group = ads_df.groupby(62).apply(lambda x: x.values.tolist())
         offer_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
@@ -543,83 +354,16 @@ def ads_levas_report(active_offer: str, report_type: str):
         sales_worksheet = sales_spreadsheet.get_worksheet(sales_worksheet_index)
         all_sales = sales_worksheet.get_all_values()
         all_sales_df = pd.DataFrame(all_sales)
-        all_sales_df[9] = (
-            all_sales_df[9].replace("", "0").astype(str).apply(str_to_int)
+        all_sales_df[10] = (
+            all_sales_df[10].replace("", "0").astype(str).apply(str_to_int)
         )  # SALES
         all_sales_df[62] = (
-            all_sales_df[13].replace("", "0").astype(str).apply(extract_ad_name)
+            all_sales_df[14].replace("", "0").astype(str).apply(extract_ad_name)
         )  # AD NAME
         all_sales_df[63] = (
-            all_sales_df[13].replace("", "0").astype(str).apply(extract_offer_name)
+            all_sales_df[14].replace("", "0").astype(str).apply(extract_offer_name)
         )  # OFFER
-        all_sales_df = all_sales_df.drop(
-            all_sales_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    13,
-                    14,
-                    15,
-                    16,
-                    17,
-                    18,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    24,
-                    25,
-                    26,
-                    27,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    45,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
+        all_sales_df = all_sales_df[all_sales_df.columns[[10, 62, 63]]]
         sales_ads_group = all_sales_df.groupby(62).apply(lambda x: x.values.tolist())
 
         active_offer_name = active_offer
@@ -823,7 +567,6 @@ def ads_levas_report(active_offer: str, report_type: str):
                 int_to_currency
             )  # CPA
             values_to_write = values_to_write_df.values.tolist()
-            # return {"data": offer_group}
             ads_levas_worksheet.clear()
             next_row = 1
             ads_levas_worksheet.update(
