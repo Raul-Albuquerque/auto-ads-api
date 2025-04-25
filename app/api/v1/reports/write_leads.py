@@ -21,7 +21,6 @@ async def write_leads(filters: LeadsReport, api_key: str = Depends(get_api_key))
                     period=filters.period,
                     active_offer=filters.active_offer,
                 )
-
             except Exception as e:
                 print(e)
         else:

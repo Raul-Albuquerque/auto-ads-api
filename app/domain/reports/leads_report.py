@@ -50,76 +50,10 @@ def all_leads_report(report_type: str, period: str):
         sales_worksheet = sales_spreadsheet.get_worksheet(sales_worksheet_index)
         all_sales = sales_worksheet.get_all_values()
         all_sales_df = pd.DataFrame(all_sales)
-        all_sales_df[9] = (
-            all_sales_df[9].replace("", "0").astype(str).apply(str_to_int)
+        all_sales_df[10] = (
+            all_sales_df[10].replace("", "0").astype(str).apply(str_to_int)
         )  # SALES
-        all_sales_df = all_sales_df.drop(
-            all_sales_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    13,
-                    14,
-                    15,
-                    16,
-                    17,
-                    18,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    24,
-                    25,
-                    26,
-                    27,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    45,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
+        all_sales_df = all_sales_df[all_sales_df.columns[[3, 10]]]
         sales_ads_list = all_sales_df.groupby(3).apply(lambda x: x.values.tolist())
 
         campaigns_spreadsheet = open_spreadsheet(
@@ -136,87 +70,24 @@ def all_leads_report(report_type: str, period: str):
         campaigns = campaigns_worksheet.get_all_values()
         for campaign in campaigns[1:]:
             campaign_id = campaign[3]
-            campaign[9] = sales_ads_list[campaign_id][0][1]
+            campaign[10] = sales_ads_list[campaign_id][0][1]
         ads_df = pd.DataFrame(campaigns)
-        ads_df = ads_df.drop(
-            ads_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    14,
-                    15,
-                    16,
-                    17,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    24,
-                    25,
-                    26,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    45,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
-        ads_df[18] = (
-            ads_df[18].replace("", "0").astype(str).apply(str_to_int)
+        ads_df = ads_df[ads_df.columns[[3, 10, 14, 19, 28]]]
+        ads_df[19] = (
+            ads_df[19].replace("", "0").astype(str).apply(str_to_int)
         )  # REVENUE
-        ads_df[27] = ads_df[27].replace("", "0").astype(str).apply(str_to_int)  # SPEND
+        ads_df[28] = ads_df[28].replace("", "0").astype(str).apply(str_to_int)  # SPEND
         ads_df[62] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_lead_info)
+            ads_df[14].replace("", "0").astype(str).apply(extract_lead_info)
         )  # FULL LEAD NAME
         ads_df[63] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_lead_block)
+            ads_df[14].replace("", "0").astype(str).apply(extract_lead_block)
         )  # LEAD
         ads_df[64] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_ad_block)
+            ads_df[14].replace("", "0").astype(str).apply(extract_ad_block)
         )  # AD NAME
         ads_df[65] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_ad_lead)
+            ads_df[14].replace("", "0").astype(str).apply(extract_ad_lead)
         )  # LEAD + ADNAME
         raw_leads_info_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
         leads_info_group = deduplicate_leads_group(raw_leads_info_group)
@@ -330,14 +201,14 @@ def all_leads_report(report_type: str, period: str):
                 daily_lead_worksheet = leads_spreadsheet.get_worksheet(
                     daily_lead_worksheet_index
                 )
-                daily_lead_worksheet.clear()
+                # daily_lead_worksheet.clear()
             else:
                 daily_lead_worksheet = duplicate_template_sheet_to_end(
                     spreadsheet=leads_spreadsheet,
                     template_sheet_index=leads_worksheet_index,
                     new_sheet_name=local_date,
                 )
-                daily_lead_worksheet.clear()
+                # daily_lead_worksheet.clear()
             next_row = 1
             daily_lead_worksheet.update(
                 f"A{next_row}:ZZ{next_row + len(daily_lead_info) - 1}", daily_lead_info
@@ -371,81 +242,15 @@ def leads_report(report_type: str, period: str, active_offer: str):
         sales_worksheet_index = search_worksheet_index(
             DB_SPREADSHEET,
             DB_SPREADSHEET_FOLDER_ID,
-            REPORT_TYPE_DATA_WORKSHEETS[report_type],
+            REPORT_TYPE_FRONT_SALES_WORKSHEETS[report_type],
         )
         sales_worksheet = sales_spreadsheet.get_worksheet(sales_worksheet_index)
         all_sales = sales_worksheet.get_all_values()
         all_sales_df = pd.DataFrame(all_sales)
-        all_sales_df[9] = (
-            all_sales_df[9].replace("", "0").astype(str).apply(str_to_int)
+        all_sales_df[10] = (
+            all_sales_df[10].replace("", "0").astype(str).apply(str_to_int)
         )  # SALES
-        all_sales_df = all_sales_df.drop(
-            all_sales_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    13,
-                    14,
-                    15,
-                    16,
-                    17,
-                    18,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    24,
-                    25,
-                    26,
-                    27,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    45,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
+        all_sales_df = all_sales_df[all_sales_df.columns[[3, 10]]]
         sales_ads_list = all_sales_df.groupby(3).apply(lambda x: x.values.tolist())
 
         campaigns_spreadsheet = open_spreadsheet(
@@ -454,7 +259,7 @@ def leads_report(report_type: str, period: str, active_offer: str):
         campaigns_worksheet_index = search_worksheet_index(
             DB_SPREADSHEET,
             DB_SPREADSHEET_FOLDER_ID,
-            REPORT_TYPE_FRONT_SALES_WORKSHEETS[report_type],
+            REPORT_TYPE_DATA_WORKSHEETS[report_type],
         )
         campaigns_worksheet = campaigns_spreadsheet.get_worksheet(
             campaigns_worksheet_index
@@ -462,91 +267,27 @@ def leads_report(report_type: str, period: str, active_offer: str):
         campaigns = campaigns_worksheet.get_all_values()
         for campaign in campaigns[1:]:
             campaign_id = campaign[3]
-            campaign[9] = sales_ads_list[campaign_id][0][1]
+            campaign[10] = sales_ads_list[campaign_id][0][1]
         ads_df = pd.DataFrame(campaigns)
-        ads_df = ads_df.drop(
-            ads_df.columns[
-                [
-                    0,
-                    1,
-                    2,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    10,
-                    11,
-                    12,
-                    14,
-                    15,
-                    16,
-                    17,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    24,
-                    25,
-                    26,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    45,
-                    46,
-                    47,
-                    48,
-                    49,
-                    50,
-                    51,
-                    52,
-                    53,
-                    54,
-                    55,
-                    56,
-                    57,
-                    58,
-                    59,
-                    60,
-                    61,
-                ]
-            ],
-            axis=1,
-        )
-        ads_df[18] = (
-            ads_df[18].replace("", "0").astype(str).apply(str_to_int)
+        ads_df = ads_df[ads_df.columns[[3, 10, 14, 19, 28]]]
+        ads_df[19] = (
+            ads_df[19].replace("", "0").astype(str).apply(str_to_int)
         )  # REVENUE
-        ads_df[27] = ads_df[27].replace("", "0").astype(str).apply(str_to_int)  # SPEND
+        ads_df[28] = ads_df[28].replace("", "0").astype(str).apply(str_to_int)  # SPEND
         ads_df[62] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_lead_info)
+            ads_df[14].replace("", "0").astype(str).apply(extract_lead_info)
         )  # FULL LEAD NAME
         ads_df[63] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_lead_block)
+            ads_df[14].replace("", "0").astype(str).apply(extract_lead_block)
         )  # LEAD
         ads_df[64] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_ad_block)
+            ads_df[14].replace("", "0").astype(str).apply(extract_ad_block)
         )  # AD NAME
         ads_df[65] = (
-            ads_df[13].replace("", "0").astype(str).apply(extract_ad_lead)
+            ads_df[14].replace("", "0").astype(str).apply(extract_ad_lead)
         )  # LEAD + ADNAME
         raw_leads_info_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
         leads_info_group = deduplicate_leads_group(raw_leads_info_group)
-
         try:
             leads_spreadsheet = open_spreadsheet(active_offer, SPREADSHEET_LEADS_ID)
             leads_worksheet_index = search_worksheet_index(
@@ -558,7 +299,6 @@ def leads_report(report_type: str, period: str, active_offer: str):
             print(error_msg)
         all_leads = leads_worksheet.get_all_values()
         leads_group = groupy_leads(all_leads)
-
         for lead in leads_group:
             lead_name = lead[1][1]
             if lead_name in leads_info_group:
@@ -649,14 +389,14 @@ def leads_report(report_type: str, period: str, active_offer: str):
             daily_lead_worksheet = leads_spreadsheet.get_worksheet(
                 daily_lead_worksheet_index
             )
-            daily_lead_worksheet.clear()
+            # daily_lead_worksheet.clear()
         else:
             daily_lead_worksheet = duplicate_template_sheet_to_end(
                 spreadsheet=leads_spreadsheet,
                 template_sheet_index=leads_worksheet_index,
                 new_sheet_name=local_date,
             )
-            daily_lead_worksheet.clear()
+            # daily_lead_worksheet.clear()
         next_row = 1
         daily_lead_worksheet.update(
             f"A{next_row}:ZZ{next_row + len(daily_lead_info) - 1}", daily_lead_info
