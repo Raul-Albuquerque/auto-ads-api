@@ -1,5 +1,6 @@
 import os
 from datetime import datetime, timedelta
+from time import sleep
 import pandas as pd
 
 from app.models.report_model import ReportResponse
@@ -33,6 +34,7 @@ def all_ads_escalados_report(report_type: str, period: str):
     )
     try:
         sales_spreadsheet = open_spreadsheet(DB_SPREADSHEET, DB_SPREADSHEET_FOLDER_ID)
+        sleep(1)
         sales_worksheet_index = search_worksheet_index(
             DB_SPREADSHEET,
             DB_SPREADSHEET_FOLDER_ID,
@@ -40,6 +42,7 @@ def all_ads_escalados_report(report_type: str, period: str):
         )
         sales_worksheet = sales_spreadsheet.get_worksheet(sales_worksheet_index)
         all_sales = sales_worksheet.get_all_values()
+        sleep(1)
         all_sales_df = pd.DataFrame(all_sales)
         all_sales_df[10] = (
             all_sales_df[10].replace("", "0").astype(str).apply(str_to_int)
@@ -58,6 +61,7 @@ def all_ads_escalados_report(report_type: str, period: str):
             campaigns_worksheet_index
         )
         campaigns = campaigns_worksheet.get_all_values()
+        sleep(1)
         for campaign in campaigns[1:]:
             campaign_id = campaign[3]
             campaign[10] = sales_ads_list[campaign_id][0][1]
@@ -81,6 +85,7 @@ def all_ads_escalados_report(report_type: str, period: str):
                 ads_escalados_spreadsheet = open_spreadsheet(
                     active_offer, SPREADSHEET_ESCALADOS_ID
                 )
+                sleep(1)
                 ads_escalados_worksheet_index = search_worksheet_index(
                     active_offer,
                     SPREADSHEET_ESCALADOS_ID,
@@ -89,6 +94,7 @@ def all_ads_escalados_report(report_type: str, period: str):
                 ads_escalados = ads_escalados_spreadsheet.get_worksheet(
                     ads_escalados_worksheet_index
                 ).get_all_values()
+                sleep(1)
 
                 ads_escalados_to_write_index = search_worksheet_index(
                     active_offer, SPREADSHEET_ESCALADOS_ID, local_date
@@ -103,6 +109,7 @@ def all_ads_escalados_report(report_type: str, period: str):
                     if is_ads_escalados_date_table_exists
                     else None
                 )
+                sleep(1)
                 if not ads_escalados_current_data:
                     print(f"A {active_offer} não possui Ads Escalados.")
                     continue
@@ -213,6 +220,7 @@ def all_ads_escalados_report(report_type: str, period: str):
                         template_sheet_index=ads_escalados_worksheet_index,
                         new_sheet_name=local_date,
                     )
+                    sleep(1)
 
                 next_row = 1
                 ads_escalados_to_write.update(
@@ -220,6 +228,7 @@ def all_ads_escalados_report(report_type: str, period: str):
                     ads_escalados,
                     value_input_option="USER_ENTERED",
                 )
+                sleep(1)
             except Exception as e:
                 error_msg = f"Erro ao abrir a planilha {active_offer}: {e}"
                 print(error_msg)
@@ -387,7 +396,7 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
                 ad[7] = f"=SE(G{row}>0;E{row}/G{row};0)"
                 ad[8] = f"=SE(F{row}>0;F{row}/E{row};0)"
                 ad[9] = local_time
-
+            return ads_escalados
             for formatted_ads in ads_escalados[1:-1]:
                 formatted_ads[3] = int_to_currency(formatted_ads[3])
                 formatted_ads[4] = int_to_currency(formatted_ads[4])
@@ -417,6 +426,7 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
                     template_sheet_index=ads_escalados_worksheet_index,
                     new_sheet_name=local_date,
                 )
+            return ads_escalados
             next_row = 1
             ads_escalados_to_write.update(
                 f"A{next_row}:ZZ{next_row + len(ads_escalados) - 1}",
