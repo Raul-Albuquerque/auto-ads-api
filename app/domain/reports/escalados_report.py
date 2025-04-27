@@ -396,7 +396,7 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
                 ad[7] = f"=SE(G{row}>0;E{row}/G{row};0)"
                 ad[8] = f"=SE(F{row}>0;F{row}/E{row};0)"
                 ad[9] = local_time
-            return ads_escalados
+
             for formatted_ads in ads_escalados[1:-1]:
                 formatted_ads[3] = int_to_currency(formatted_ads[3])
                 formatted_ads[4] = int_to_currency(formatted_ads[4])
@@ -426,7 +426,6 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
                     template_sheet_index=ads_escalados_worksheet_index,
                     new_sheet_name=local_date,
                 )
-            return ads_escalados
             next_row = 1
             ads_escalados_to_write.update(
                 f"A{next_row}:ZZ{next_row + len(ads_escalados) - 1}",
