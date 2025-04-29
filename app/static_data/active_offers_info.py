@@ -1,4 +1,5 @@
 ACTIVE_OFFERS_INFO = [
+    {"offer_name": "PLR_ESP"},
     {"offer_name": "TSR_ESP"},
     {"offer_name": "LOV_ENG"},
     {"offer_name": "MSG_ESP"},

@@ -1,4 +1,5 @@
 FRONT_PRODUCT_LIST = [
+    "Protocolo La Rosa",
     "Mensajes Rentables",
     "Fórmula de la Pasión",
     "Programa Frases del Amor",

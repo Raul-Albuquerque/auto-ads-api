@@ -1,4 +1,5 @@
 PLAYERS_BY_OFFER = {
+    "PLR_ESP": ["680fc71747893d23a658722a"],
     "TSR_ESP": [
         "681070d988b2b65712c4bb54",
         "6810711eba1253ea805abdb5",
