@@ -1,4 +1,9 @@
 PLAYERS_BY_OFFER = {
+    "TSR_ESP": [
+        "681070d988b2b65712c4bb54",
+        "6810711eba1253ea805abdb5",
+        "6810715e88b2b65712c4bba3",
+    ],
     "LOV_ENG": ["6750f08f5265c7b99d8a708f"],
     "MSG_ESP": [
         "6809271ee81d292f6f2f57f9",
@@ -10,6 +15,9 @@ PLAYERS_BY_OFFER = {
         "68091e1438de5bb8621a8a26",
         "68091e636f8f4b5452b7927f",
         "68091eb0695d494dad8c530a",
+        "680ed12781dbf26252257897",
+        "680ed130bdb44a29f1b8482a",
+        "680ed2bc17d1a06e748a9cf1",
     ],
     "LVF_ESP": ["68028a6b5cb5553c040f6ae5", "68028a9526efc34fe2bfbe01"],
     "TMP_ESP": [
