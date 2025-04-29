@@ -71,3 +71,17 @@ def extract_ad_lead(text: str) -> str:
     if len(blocks) < 5:
         return ""
     return f"{blocks[1]}{blocks[4]}"
+
+
+def extract_player_plataform(s: str) -> str:
+    match = re.search(r"\[(YT|FB)\]\[[A-Z]{3}_[A-Z]{3}\]$", s)
+    if match:
+        return match.group(1)
+    return ""
+
+
+def extract_player_offer_name(s: str) -> str:
+    match = re.search(r"\[(YT|FB)\]\[([A-Z]{3}_[A-Z]{3})\]$", s)
+    if match:
+        return match.group(2)
+    return ""

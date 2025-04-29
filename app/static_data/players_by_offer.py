@@ -1,4 +1,5 @@
 PLAYERS_BY_OFFER = {
+    "LOV_ENG": ["6750f08f5265c7b99d8a708f"],
     "MSG_ESP": [
         "6809271ee81d292f6f2f57f9",
         "6809282313b55a0695b18868",

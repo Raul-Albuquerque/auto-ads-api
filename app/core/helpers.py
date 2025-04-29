@@ -1,6 +1,7 @@
 import base64, os, shutil
 from typing import List, Dict, Any
 from datetime import datetime, timedelta
+from collections import defaultdict
 
 from config import TIMEZONE
 
@@ -150,3 +151,66 @@ def get_all_players_id(players_by_offer: dict):
     for players in players_by_offer.values():
         players_id_list.extend(players)
     return players_id_list
+
+
+def process_data(raw_data):
+    result = {}
+
+    for ad_name, entries in raw_data.items():
+        if ad_name == "":  # ignora entradas sem nome
+            continue
+
+        platforms = defaultdict(
+            lambda: {
+                "sum_total_uniq": 0,
+                "sum_over_pitch": 0,
+                "sum_under_pitch": 0,
+                "ad_name": ad_name,
+                "platform": "",
+            }
+        )
+
+        for entry in entries:
+            _, _, total_uniq, over, under, _, platform = entry
+
+            platforms[platform]["sum_total_uniq"] += int(total_uniq)
+            platforms[platform]["sum_over_pitch"] += int(over)
+            platforms[platform]["sum_under_pitch"] += int(under)
+            platforms[platform]["platform"] = platform
+
+        result[ad_name] = platforms
+
+    return result
+
+
+def formatted_date(day: str = "today") -> str:
+    week_days = ["seg.", "ter.", "qua.", "qui.", "sex.", "sáb.", "dom."]
+    months = [
+        "jan.",
+        "fev.",
+        "mar.",
+        "abr.",
+        "mai.",
+        "jun.",
+        "jul.",
+        "ago.",
+        "set.",
+        "out.",
+        "nov.",
+        "dez.",
+    ]
+
+    today = datetime.now()
+
+    if day == "today":
+        date = today
+    elif day == "yesterday":
+        date = today - timedelta(days=1)
+    else:
+        raise ValueError("Parâmetro 'day' deve ser 'today' ou 'yesterday'.")
+
+    week_day = week_days[date.weekday()]
+    d = date.day
+    month = months[date.month - 1]
+
+    return f"{week_day} {d:02d} {month}"
