@@ -1,1 +1,0 @@
-from .get_ads_info import get_campaigns
