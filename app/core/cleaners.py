@@ -3,15 +3,15 @@ import re
 
 def extract_ad_name(ad_name: str) -> str:
     ad_name = ad_name.strip()
-    pattern = r"^[A-Z]{3,4}_[A-Z]{3}(_[A-Z0-9]+)*$"
-
-    if re.match(pattern, ad_name):
-        return ad_name
-    else:
-        parts = ad_name.split(" ")[0]
-        if re.match(r"^[A-Z]{3,4}_[A-Z]{3}(_[A-Z0-9]+)*$", parts):
-            return parts
+    if not re.match(r"^[A-Z]{3}_[A-Z]{3}", ad_name):
         return ""
+    first_part = ad_name.split(" ")[0]
+    matches = re.findall(r"[A-Za-z0-9]+(?:\.[0-9]+)?", first_part)
+
+    if not matches:
+        return ""
+
+    return "_".join(matches)
 
 
 def extract_offer_name(ad_name: str) -> str:
