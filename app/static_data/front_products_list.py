@@ -1,4 +1,5 @@
 FRONT_PRODUCT_LIST = [
+    "Tiktok Rewards",
     "Protocolo La Rosa",
     "Mensajes Rentables",
     "Fórmula de la Pasión",

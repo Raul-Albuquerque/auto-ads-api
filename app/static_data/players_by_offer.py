@@ -1,4 +1,10 @@
 PLAYERS_BY_OFFER = {
+    "TTR_ENG": [
+        "68152fad5dc4b281b98a585b",
+        "68152fe94d4f07ee04bd1c1f",
+        "6815300a8ce60785a1fa414a",
+        "6815304326d77b69f164c2ac",
+    ],
     "PLR_ESP": ["680fc71747893d23a658722a"],
     "TSR_ESP": [
         "681070d988b2b65712c4bb54",
@@ -38,5 +44,12 @@ PLAYERS_BY_OFFER = {
         "679ab4d763a85e3ab900e4f4",
         "67e35fcb15bf4ea88c56d373",
         "67e44c141631ff55352adad8",
+        "68152db65dc4b281b98a569b",
+        "68152e268ce60785a1fa3f70",
+        "68152e8d4d4f07ee04bd1a82",
+        "68152f0156dc9b3a02dd7fc1",
+        "68152fff5dc4b281b98a58d1",
+        "681530ca56dc9b3a02dd8204",
+        "68153140f6ce8dd0fc65703e",
     ],
 }
