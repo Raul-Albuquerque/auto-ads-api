@@ -82,19 +82,21 @@ def all_ads_escalados_report(report_type: str, period: str):
         for active_offer_item in ACTIVE_OFFERS_INFO:
             active_offer = active_offer_item["offer_name"]
             try:
-                ads_escalados_spreadsheet = open_spreadsheet(
-                    active_offer, SPREADSHEET_ESCALADOS_ID
-                )
-                sleep(1)
-                ads_escalados_worksheet_index = search_worksheet_index(
-                    active_offer,
-                    SPREADSHEET_ESCALADOS_ID,
-                    REPORT_WORKSHEETS[report_type],
-                )
-                ads_escalados = ads_escalados_spreadsheet.get_worksheet(
-                    ads_escalados_worksheet_index
-                ).get_all_values()
-                sleep(1)
+                try:
+                    ads_escalados_spreadsheet = open_spreadsheet(
+                        active_offer, SPREADSHEET_ESCALADOS_ID
+                    )
+                    ads_escalados_worksheet_index = search_worksheet_index(
+                        active_offer,
+                        SPREADSHEET_ESCALADOS_ID,
+                        REPORT_WORKSHEETS[report_type],
+                    )
+                    ads_escalados = ads_escalados_spreadsheet.get_worksheet(
+                        ads_escalados_worksheet_index
+                    ).get_all_values()
+                except Exception as e:
+                    print(f"A {active_offer} não possui tabela ativa!")
+                    continue
 
                 ads_escalados_to_write_index = search_worksheet_index(
                     active_offer, SPREADSHEET_ESCALADOS_ID, local_date
@@ -111,8 +113,11 @@ def all_ads_escalados_report(report_type: str, period: str):
                 )
                 sleep(1)
                 if not ads_escalados_current_data:
-                    print(f"A {active_offer} não possui Ads Escalados.")
-                    continue
+                    duplicate_template_sheet_to_end(
+                        spreadsheet=ads_escalados_spreadsheet,
+                        template_sheet_index=ads_escalados_worksheet_index,
+                        new_sheet_name=local_date,
+                    )
                 if ads_escalados_current_data:
                     ads_current_info = [ads for ads in ads_escalados_current_data[1:-1]]
                     for ad_current_info in ads_current_info:
@@ -210,25 +215,16 @@ def all_ads_escalados_report(report_type: str, period: str):
                 ads_escalados_to_write_index = search_worksheet_index(
                     active_offer, SPREADSHEET_ESCALADOS_ID, local_date
                 )
-                if ads_escalados_to_write_index:
-                    ads_escalados_to_write = ads_escalados_spreadsheet.get_worksheet(
-                        ads_escalados_to_write_index
-                    )
-                else:
-                    ads_escalados_to_write = duplicate_template_sheet_to_end(
-                        spreadsheet=ads_escalados_spreadsheet,
-                        template_sheet_index=ads_escalados_worksheet_index,
-                        new_sheet_name=local_date,
-                    )
-                    sleep(1)
 
                 next_row = 1
+                ads_escalados_to_write = ads_escalados_spreadsheet.get_worksheet(
+                    ads_escalados_to_write_index
+                )
                 ads_escalados_to_write.update(
-                    f"A{next_row}:ZZ{next_row + len(ads_escalados) - 1}",
+                    f"A{next_row}:J{next_row + len(ads_escalados) - 1}",
                     ads_escalados,
                     value_input_option="USER_ENTERED",
                 )
-                sleep(1)
             except Exception as e:
                 error_msg = f"Erro ao abrir a planilha {active_offer}: {e}"
                 print(error_msg)
@@ -296,21 +292,30 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
         )  # AD NAME
         ads_group = ads_df.groupby(63).apply(lambda x: x.values.tolist())
         try:
-            ads_escalados_spreadsheet = open_spreadsheet(
-                active_offer, SPREADSHEET_ESCALADOS_ID
-            )
-            ads_escalados_worksheet_index = search_worksheet_index(
-                active_offer,
-                SPREADSHEET_ESCALADOS_ID,
-                REPORT_WORKSHEETS[report_type],
-            )
-            ads_escalados = ads_escalados_spreadsheet.get_worksheet(
-                ads_escalados_worksheet_index
-            ).get_all_values()
+            try:
+                ads_escalados_spreadsheet = open_spreadsheet(
+                    active_offer, SPREADSHEET_ESCALADOS_ID
+                )
+                ads_escalados_worksheet_index = search_worksheet_index(
+                    active_offer,
+                    SPREADSHEET_ESCALADOS_ID,
+                    REPORT_WORKSHEETS[report_type],
+                )
+                ads_escalados = ads_escalados_spreadsheet.get_worksheet(
+                    ads_escalados_worksheet_index
+                ).get_all_values()
+            except Exception as e:
+                return ReportResponse(
+                    report_title="Write ads escalados report - Error",
+                    generated_at=datetime.now(),
+                    message=f"A {active_offer} não possui tabela ativa!",
+                    status=400,
+                )
 
             ads_escalados_to_write_index = search_worksheet_index(
                 active_offer, SPREADSHEET_ESCALADOS_ID, local_date
             )
+
             is_ads_escalados_date_table_exists = (
                 True if ads_escalados_to_write_index else False
             )
@@ -322,11 +327,10 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
                 else None
             )
             if not ads_escalados_current_data:
-                return ReportResponse(
-                    report_title="Write ads escalados report - Error",
-                    generated_at=datetime.now(),
-                    message=f"A {active_offer} não possui Ads Escalados.",
-                    status=400,
+                duplicate_template_sheet_to_end(
+                    spreadsheet=ads_escalados_spreadsheet,
+                    template_sheet_index=ads_escalados_worksheet_index,
+                    new_sheet_name=local_date,
                 )
             if ads_escalados_current_data:
                 ads_current_info = [ads for ads in ads_escalados_current_data[1:-1]]
@@ -416,19 +420,13 @@ def ads_escalados_report(active_offer: str, report_type: str, period: str):
             ads_escalados_to_write_index = search_worksheet_index(
                 active_offer, SPREADSHEET_ESCALADOS_ID, local_date
             )
-            if ads_escalados_to_write_index:
-                ads_escalados_to_write = ads_escalados_spreadsheet.get_worksheet(
-                    ads_escalados_to_write_index
-                )
-            else:
-                ads_escalados_to_write = duplicate_template_sheet_to_end(
-                    spreadsheet=ads_escalados_spreadsheet,
-                    template_sheet_index=ads_escalados_worksheet_index,
-                    new_sheet_name=local_date,
-                )
+
             next_row = 1
+            ads_escalados_to_write = ads_escalados_spreadsheet.get_worksheet(
+                ads_escalados_to_write_index
+            )
             ads_escalados_to_write.update(
-                f"A{next_row}:ZZ{next_row + len(ads_escalados) - 1}",
+                f"A{next_row}:J{next_row + len(ads_escalados) - 1}",
                 ads_escalados,
                 value_input_option="USER_ENTERED",
             )
