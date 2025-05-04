@@ -79,7 +79,7 @@ async def write_utmify_front_sales(
         worksheet.clear()
         next_row = 1
         worksheet.update(
-            f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}", values_to_write
+            f"A{next_row}:BK{next_row + len(values_to_write) - 1}", values_to_write
         )
         return ReportResponse(
             report_title="Write Utmify Front Sales - Success",

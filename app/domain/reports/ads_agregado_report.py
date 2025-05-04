@@ -220,7 +220,7 @@ def all_ads_agregado_report(report_type: str):
                 ads_total_worksheet.clear()
                 next_row = 1
                 ads_total_worksheet.update(
-                    f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}",
+                    f"A{next_row}:I{next_row + len(values_to_write) - 1}",
                     values_to_write,
                 )
 
@@ -432,7 +432,7 @@ def ads_agregado_report(active_offer: str, report_type: str):
             ads_total_worksheet.clear()
             next_row = 1
             ads_total_worksheet.update(
-                f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}",
+                f"A{next_row}:I{next_row + len(values_to_write) - 1}",
                 values_to_write,
             )
 

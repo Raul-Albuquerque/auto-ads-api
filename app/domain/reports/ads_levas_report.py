@@ -296,7 +296,7 @@ def all_ads_levas_report(report_type: str):
                 ads_levas_worksheet.clear()
                 next_row = 1
                 ads_levas_worksheet.update(
-                    f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}",
+                    f"A{next_row}:S{next_row + len(values_to_write) - 1}",
                     values_to_write,
                 )
     except Exception as e:

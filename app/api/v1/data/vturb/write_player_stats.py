@@ -46,7 +46,7 @@ def write_player_stats(filters: VturbFilters, api_key: str = Depends(get_api_key
         worksheet.clear()
         next_row = 1
         worksheet.update(
-            f"A{next_row}:ZZ{next_row + len(values_to_write) - 1}", values_to_write
+            f"A{next_row}:F{next_row + len(values_to_write) - 1}", values_to_write
         )
         return ReportResponse(
             report_title="Write Players Stats - Success",
