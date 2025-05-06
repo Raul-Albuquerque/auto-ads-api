@@ -3,6 +3,9 @@ import re
 
 def extract_ad_name(ad_name: str) -> str:
     ad_name = ad_name.strip()
+    bracket_match = re.findall(r"\[[^\[\]]+\]", ad_name)
+    if len(bracket_match) >= 2:
+        return f"{bracket_match[0]} {bracket_match[1]}"
     if not re.match(r"^[A-Z]{3}_[A-Z]{3}", ad_name):
         return ""
     first_part = ad_name.split(" ")[0]
@@ -15,9 +18,18 @@ def extract_ad_name(ad_name: str) -> str:
 
 
 def extract_offer_name(ad_name: str) -> str:
+    ad_name = ad_name.strip()
+    bracket_match = re.findall(r"\[[^\[\]]+\]", ad_name)
+    if bracket_match:
+        first_block = bracket_match[0][1:-1]
+        if "CRST_" in first_block:
+            parts = first_block.split("CRST_")
+            if len(parts) == 2 and parts[1]:
+                return parts[1]
     match = re.match(r"([A-Z0-9]{3,4}_[A-Z0-9]{3})", ad_name)
     if match:
         return match.group(0)
+
     return ""
 
 
