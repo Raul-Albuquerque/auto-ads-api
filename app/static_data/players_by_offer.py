@@ -1,4 +1,5 @@
 PLAYERS_BY_OFFER = {
+    "SDA_ENG": ["681cf7e0a6eebc0be8070677", "681cf7e0bebf74398a674446"],
     "TCN_ESP": ["681a21274b76da6ad7b27799", "681a217a61bf26ce0ffdde2b"],
     "TTR_ENG": [
         "68152fad5dc4b281b98a585b",

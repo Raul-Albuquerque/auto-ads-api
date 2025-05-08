@@ -140,6 +140,7 @@ def convert_stats_to_list(data: List[Dict[str, Any]]) -> List[List[Any]]:
             item["total_over_pitch"],
             item["total_under_pitch"],
             item["error"],
+            item["totalUniqDevicePlays"],
         ]
         for item in data
         if not item.get("error")
@@ -167,16 +168,24 @@ def process_data(raw_data):
                 "sum_under_pitch": 0,
                 "ad_name": ad_name,
                 "platform": "",
+                "sum_total_uniq_device_plays": 0,
             }
         )
 
         for entry in entries:
-            _, _, total_uniq, over, under, _, platform = entry
+            total_uniq = entry[2]
+            over = entry[3]
+            under = entry[4]
+            platform = entry[7]
+            total_uniq_device_plays = entry[6]
 
             platforms[platform]["sum_total_uniq"] += int(total_uniq)
             platforms[platform]["sum_over_pitch"] += int(over)
             platforms[platform]["sum_under_pitch"] += int(under)
             platforms[platform]["platform"] = platform
+            platforms[platform]["sum_total_uniq_device_plays"] += int(
+                total_uniq_device_plays
+            )
 
         result[ad_name] = platforms
 

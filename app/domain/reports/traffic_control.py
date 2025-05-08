@@ -51,6 +51,9 @@ async def get_vturb_info():
         player_stats_df[4] = (
             player_stats_df[4].replace("", "0").astype(str).apply(str_to_int)
         )
+        player_stats_df[8] = (
+            player_stats_df[6].replace("", "0").astype(str).apply(str_to_int)
+        )
         player_stats_df[6] = (
             player_stats_df[1]
             .replace("", "0")
@@ -63,9 +66,11 @@ async def get_vturb_info():
             .astype(str)
             .apply(extract_player_plataform)
         )
+
         raw_player_stats_by_plataform = player_stats_df.groupby(6).apply(
             lambda x: x.values.tolist()
         )
+
         player_stats_by_plataform = process_data(raw_player_stats_by_plataform)
         return player_stats_by_plataform
 
