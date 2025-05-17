@@ -1,4 +1,9 @@
 ACTIVE_OFFERS_INFO = [
+    {"offer_name": "LOT_ENG"},
+    {"offer_name": "MSM_ESP"},
+    {"offer_name": "3AI_ENG"},
+    {"offer_name": "SRM_ESP"},
+    {"offer_name": "TTR_ESP"},
     {"offer_name": "CRST_ED_ESP"},
     {"offer_name": "SDA_ENG"},
     {"offer_name": "TCN_ESP"},
